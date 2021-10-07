@@ -297,3 +297,318 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
     PRIMARY KEY (`PK_id_orden`),
     FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+
+-- --------------------------------------------------------------- --
+-- --------------------------------------------------------------- --
+-- ----------------------- Area Financiera ----------------------- --
+-- --------------------------------------------------------------- --
+-- --------------------------------------------------------------- --
+
+--
+-- Estructura de tabla para la tabla `cierre_registrocontable`
+--
+
+CREATE TABLE `empresarial`.`cierre_registrocontable` (
+  `Correlatiivo_DetalleRegistro` int(11) NOT NULL,
+  `Glosa_Partida` varchar(128) NOT NULL,
+  `Monto_Cuadre` decimal(20,8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `clasificacion_cuenta`
+--
+
+CREATE TABLE `empresarial`.`clasificacion_cuenta` (
+  `Codigo_ClasificacionCuenta` int(11) NOT NULL,
+  `Clasificacion_Cuenta` varchar(128) NOT NULL,
+  `Observaciones_Clasificacion` varchar(128) NOT NULL,
+  `Estado_Clasificacion` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cuenta_contable`
+--
+
+CREATE TABLE `empresarial`.`cuenta_contable` (
+  `Codigo_CuentaContable` int(11) NOT NULL,
+  `Codigo_Clasificacion` int(11) NOT NULL,
+  `Correlativo_Subclasificacion` int(11) NOT NULL,
+  `Estado_CuentaContable` tinyint(4) NOT NULL,
+  `Monto_CuentaContable` decimal(20,2) NOT NULL,
+  `Efecto_CuentaContable` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalle_registrocontable`
+--
+
+CREATE TABLE `empresarial`.`detalle_registrocontable` (
+  `Correlativo_Registro` int(11) NOT NULL,
+  `Codigo_Encabezado` int(11) NOT NULL,
+  `Codigo_CuentaContable` int(11) NOT NULL,
+  `Monto_Registro` decimal(20,2) NOT NULL,
+  `Lado_Monto` tinyint(4) NOT NULL,
+  `Descripcion_Registro` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `divisa`
+--
+
+CREATE TABLE `empresarial`.`divisa` (
+  `Codigo_Divisa` int(11) NOT NULL,
+  `Nombre_Divisa` varchar(50) NOT NULL,
+  `Simbolo_Divisa` varchar(1) NOT NULL,
+  `Estado_Divisa` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `encabezado_registrocontable`
+--
+
+CREATE TABLE `empresarial`.`encabezado_registrocontable` (
+  `Codigo_EncabezadoRegistro` int(11) NOT NULL,
+  `Codigo_PeriodoFiscal` int(11) NOT NULL,
+  `Codigo_Divisa` int(11) NOT NULL,
+  `Mes_Registro` int(11) NOT NULL,
+  `Descripcion_Registro` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `impuesto`
+--
+
+CREATE TABLE `empresarial`.`impuesto` (
+  `Codigo_Impuesto` int(11) NOT NULL,
+  `Nombre_Impuesto` varchar(128) NOT NULL,
+  `Porcentaje_Impuesto` decimal(3,3) NOT NULL,
+  `Concepto_Impuesto` varchar(100) NOT NULL,
+  `Estado_Impuesto` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `periodo_fiscal`
+--
+
+CREATE TABLE `empresarial`.`periodo_fiscal` (
+  `Codigo_PeriodoFiscal` int(11) NOT NULL,
+  `Inicio_PeriodoFiscal` date NOT NULL,
+  `Fin_PeriodoFiscal` date NOT NULL,
+  `Estado_PeriodoFiscal` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subclasificacion_cuenta`
+--
+
+CREATE TABLE `empresarial`.`subclasificacion_cuenta` (
+  `Codigo_Subclasificacion` int(11) NOT NULL,
+  `Clasificacion_Cuenta` int(11) NOT NULL,
+  `Subclasificacion_Cuenta` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
+  `Observacion_Subclasificacion` varchar(128) CHARACTER SET utf8mb4 NOT NULL,
+  `Estado_Subclasificacion` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------------- --
+-- --------------------------------------------------------------- --
+-- ---------------------- Area de bancos ------------------------- --
+-- --------------------------------------------------------------- --
+-- --------------------------------------------------------------- --
+
+/*Área de Bancos*/
+create table `empresarial`.`moneda`(
+	`id_moneda` varchar(10) primary key,
+    `nombre_moneda` varchar(20) not null,
+    `Abreviatura` varchar(20) not null,
+    `tipo_cambio` float,
+    `estatus_moneda` char(1)
+)engine = InnoDB default charset=utf8mb4;
+
+
+create table `empresarial`.`Documento_bancario`(
+	`codigo_Documento` varchar(10) primary key,
+    `nombre_Documento` varchar(50),
+    `afecta` char(1),  -- + o - a la cuenta
+    `estatus_documento` char(1)
+
+) engine = InnoDB default char set=utf8mb4;
+
+create table `empresarial`.`mov_bancEnc`( -- solo que mov se realizo y cual es el monto 
+	`id_movEnc` varchar(10) primary key,
+    `codigo_Documento` varchar(10),
+    `fecha` date,
+    `monto` float,
+    `descripcion` varchar(80),
+    
+    foreign key (`codigo_Documento`) references `Documento_bancario` (`codigo_Documento`)
+	
+) engine = InnoDB default char set=utf8mb4;
+
+-- drop table mov_bancEnc;
+-- drop table mov_bancDet;
+
+create table `empresarial`.`mov_bancDet`( -- cuentas involucradas y partida contable 
+	`id_movEnc` varchar(10),
+    `codigo_concepto` varchar(10),
+    `saldo_deudor` float,
+	`saldo_acreedor` float, 
+    
+    primary key (`id_movEnc`, `codigo_concepto`), -- clave compuesta y agruparemos por tipo de saldo 
+    
+    foreign key (`id_movEnc`) references `mov_bancEnc`(`id_movEnc`),
+    foreign key (`codigo_concepto`) references `concepto_bancario`(`codigo_concepto`)
+    
+) engine = InnoDB default char set=utf8mb4;
+
+/*create table `concepto_movimiento`(
+	`id_concepto` varchar(10) primary key,
+    `nombre_concepto` varchar(35), /*clientes, anticipo, cobro a clientes
+    -- `tipo_concepto` varchar(50) /*cargo, abono
+) engine = InnoDB default char set=latin1;*/
+
+
+create table `empresarial`.`forma_pago`(
+	`id_formapago` varchar(10) primary key,
+    `tipo_pago` varchar(35) /*cheque, efectivo, tarjeta, nota de credito, otro*/
+) engine = InnoDB default char set=utf8mb4;
+
+/*create table `movimientos_bancarios`(
+	`id_concepto` varchar(10), -- foranea
+    `fecha` date,
+    `fecha_aplicacion` datetime,
+    `descripcion` varchar(80),
+    `estado` char(1),
+    `id_formapago` varchar(10), -- foranea
+	`abono` float, 
+    `cargo` float,
+    `saldo` float,
+    
+    foreign key (`id_concepto`) references `concepto_movimiento`(`id_concepto`),
+    foreign key (`id_formapago`) references `forma_pago`(`id_formapago`)
+) engine = InnoDB default char set=latin1;*/
+
+-- drop table banco;
+create table `empresarial`.`banco`(
+	`id_banco` varchar(10) primary key,
+	`nombre_banco` varchar(50),
+    `nombre_cuenta` varchar(50), /*Cuenta maestra*/
+    `clave_banco` varchar(10),
+    `funcionario` varchar(50),
+    `telefono` int,
+    `numero_plaza` int,
+    `numero_sucursal` int,
+    `saldo_inicial` float,
+    `id_moneda` varchar(10),
+    `id_movEnc` varchar(10), /*Movimientos*/
+    
+    foreign key (`id_moneda`) references `moneda`(`id_moneda`),
+    foreign key (`id_movEnc`) references `mov_bancEnc`(`id_movEnc`)
+) engine = InnoDB default char set=utf8mb4;
+
+create table `empresarial`.`conciliacion_bancenc`(
+	`id_encabezado` varchar(10) primary key,
+    `cargo_conciliar` float,
+    `abono_conciliar` float,
+    `saldo_corte` float,
+    `cargo_conciliado` float,
+    `abono_conciliado` float,
+    `saldo_final` float
+) engine = InnoDB default char set=utf8mb4;
+
+create table `empresarial`.`conciliacion_bancaria_det`(
+	`id_encabezado` varchar(10), /*foranea*/
+	`codigo_concepto` varchar(10), /*foranea*/
+    `fecha_aplicacion` date,
+    `descripcion` varchar(50),
+    `id_formapago` varchar(10), /*foranea*/
+    `beneficiario` varchar(35),
+    `estado_conciliacion` char(1),
+    `cargo` float,
+    `abono` float,
+    
+    primary key (`id_encabezado`, `codigo_concepto`, `id_formapago`),
+    
+	foreign key (`codigo_concepto`) references `concepto_bancario`(`codigo_concepto`),
+    foreign key(`id_formapago`) references `forma_pago` (`id_formapago`),
+    foreign key(`id_encabezado`) references `conciliacion_bancenc` (`id_encabezado`)
+) engine = InnoDB default char set=utf8mb4;
+
+-- --------------------------------------------------------------- --
+-- --------------------------------------------------------------- --
+-- ---------------------- Area de Nomina ------------------------- --
+-- --------------------------------------------------------------- --
+-- --------------------------------------------------------------- --
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_puesto` (
+  `PK_id_puesto` INT NOT NULL AUTO_INCREMENT,
+  `nombre_puesto` VARCHAR(45) NULL DEFAULT NULL,
+  `salario_puesto` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`PK_id_puesto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_empleado` (
+  `PK_id_empleado` INT NOT NULL AUTO_INCREMENT,
+  `nombre_empleado` VARCHAR(45) NULL DEFAULT NULL,
+  `apellido_empleado` VARCHAR(45) NULL DEFAULT NULL,
+  `dpi_empleado` VARCHAR(15) NULL DEFAULT NULL,
+  `correo_empleado` VARCHAR(45) NULL DEFAULT NULL,
+  `puesto_empleado` VARCHAR(15) NULL DEFAULT NULL,
+  `estado_empleado` TINYINT NULL DEFAULT NULL,
+  `fechacontrato_empleado` DATE NULL DEFAULT NULL,
+  PRIMARY KEY (`PK_id_empleado`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+/*Área de Nómina*/
+create table `empresarial`.`concepto_planilla`(
+	`id_conceptoPlanilla` varchar(10) primary key,
+	`nombre_concepto` varchar(20),
+	`tipo_concepto` varchar (10),
+	`clase_concepto` varchar(25),
+	`Valor_concepto` float
+	-- aplicacion_concepto varchar(20)
+) engine = InnoDB default char set=utf8mb4;
+
+create table `empresarial`.`planilla_enc`(
+	`id_planillaenc` varchar(10) primary key,
+	`total_percepcion` float,
+	`total_deduccion` float,
+	`total_liquido`  float
+    -- id_concepto varchar(10),
+    
+    -- foreign key (id_concepto) references concepto_movimiento(id_concepto)
+) engine = InnoDB default char set=utf8mb4;
+
+create table `empresarial`.`planilla_det`(
+	`id_planillaDe` varchar(10),
+	`id_planillaenc` varchar(10),
+	`id_empleado` varchar(10),
+    `id_conceptoPlanilla` varchar(10),
+	`valor_conceptoDet` float,
+    
+    primary key (`id_planillaDe`, `id_planillaenc`, `id_empleado`, `id_conceptoPlanilla`),
+    
+    foreign key (`id_planillaenc`) references `planilla_enc`(`id_planillaenc`),
+	foreign key(`id_conceptoPlanilla`) references `Concepto_Planilla`(`id_conceptoPlanilla`),
+	foreign key(`id_empleado`) references `empleado_contratado`(`id_empleado`)
+) engine = InnoDB default char set=utf8mb4;
+
+
