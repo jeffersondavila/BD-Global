@@ -913,6 +913,65 @@ ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
+-- Table `administracion`.`recepcioncompra_encabezado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_recepcioncompra_encabezado` (
+ `PK_codigo_recepcionCompra` INT NULL DEFAULT NULL,
+ `codigo_proveedor` INT NULL DEFAULT NULL,
+ `PK_codigo_bodega` INT NULL DEFAULT NULL,
+   `fecha_emision` VARCHAR(35) NULL DEFAULT NULL,
+   `fecha_entrega` VARCHAR(35) NULL DEFAULT NULL,
+   `subtotal_encabezado` INT NULL DEFAULT NULL,
+   `estatus_ordecompra` TINYINT(2) NOT NULL,
+
+  PRIMARY KEY (
+  `PK_codigo_recepcionCompra`,
+  `codigo_proveedor`,
+  `Pk_codigo_bodega`
+  ),
+  
+  CONSTRAINT `fk_PK_codigo_proveedor29` 
+  FOREIGN KEY (`codigo_proveedor`)
+REFERENCES `empresarial`.`tbl_proveedor` (`PK_codigo_proveedor`)
+
+  )
+  ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+-- -----------------------------------------------------
+-- Table `administracion`.`recepcioncompra_detalle`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_recepcioncompra_detalle` (
+`correlativo` INT AUTO_INCREMENT,
+`PK_codigo_recepcionCompra` INT NULL DEFAULT NULL,
+ `PK_codigo_producto` INT NULL DEFAULT NULL,
+ `PK_codigo_bodega` INT NULL DEFAULT NULL,
+ `cantidad_detalle` INT NULL DEFAULT NULL,
+ `costo_detalle` INT NULL DEFAULT NULL,
+
+	 	
+  PRIMARY KEY (
+ `correlativo` ,
+ `PK_codigo_recepcionCompra`,
+ `PK_codigo_producto` ,
+  `Pk_codigo_bodega`
+  ),
+  
+  CONSTRAINT `fk_PK_codigo_recepcionCompra19` 
+  FOREIGN KEY (`PK_codigo_recepcionCompra`)
+REFERENCES `empresarial`.`tbl_recepcioncompra_encabezado` (`PK_codigo_recepcionCompra`),
+
+CONSTRAINT `fk_PK_codigo_producto212` 
+  FOREIGN KEY (`Pk_codigo_producto`)
+REFERENCES `empresarial`.`tbl_producto` (`PK_codigo_producto`),
+
+CONSTRAINT `fk_PK_codigo_bodega122` 
+FOREIGN KEY (`PK_codigo_bodega`)
+REFERENCES `empresarial`.`tbl_bodega` (`PK_codigo_bodega`)   
+  )
+  
+ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
 -- Table `administracion`.`cliente`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cliente` (
