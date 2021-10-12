@@ -909,6 +909,7 @@ REFERENCES `empresarial`.`tbl_bodega` (`PK_codigo_bodega`)
   
 ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
+
 -- -----------------------------------------------------
 -- Table `administracion`.`cliente`
 -- -----------------------------------------------------
@@ -1116,6 +1117,10 @@ REFERENCES `empresarial`.`tbl_producto` (`PK_codigo_producto`)
  
   )
   ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+
+
+
   
 INSERT INTO `empresarial`.`tbl_bodega` (`PK_codigo_bodega`, `nombre_bodega`, `estatus_bodega`)
  VALUES ('1', 'zona1', '1');
