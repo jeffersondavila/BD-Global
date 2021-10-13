@@ -3,7 +3,9 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 CREATE SCHEMA IF NOT EXISTS `empresarial` DEFAULT CHARACTER SET utf8;
 USE `empresarial`;
-
+-- -----------------------------------------------------
+-- Inicio Hotelerìa
+  
   -- -----------------------------------------------------
   -- Table `hoteleria`.`Piso`
   -- -----------------------------------------------------
@@ -14,16 +16,10 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_piso` (
    `estado_piso` TINYINT NULL DEFAULT NULL,
    PRIMARY KEY (`PK_id_piso`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
-INSERT INTO 
-`empresarial`.`tbl_piso` (
-`PK_id_piso`, 
-`cantidad_habitaciones_piso`, 
-`descripcion_piso`, 
-`estado_piso`) 
-VALUES ('1', '100', 'Habitaciones grandes', '1'),
-('2', '200', 'Habitaciones mediana', '1'),
-('3', '300', 'Habitaciones pequeña', '1'),
-('4', '50', 'Habitaciones VIP', '1');
+INSERT INTO
+  `empresarial`.`tbl_piso`
+VALUES
+  ('1', '100', 'Habitaciones grandes', '1');
 
   -- -----------------------------------------------------
   -- Table `hoteleria`.`horario`
@@ -38,28 +34,10 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_horario` (
    PRIMARY KEY (`PK_id_horario`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO 
-`empresarial`.`tbl_horario` (
-`PK_id_horario`, 
-`entrada_horario`, 
-`salida_horario`, 
-`horas_extras_horario`, 
-`descripcion_horario`, 
-`estado_horario`) 
+`empresarial`.`tbl_horario` 
 VALUES ('1', '8 am', '8 pm', '8', 'Horario matutino', '1'),
 ('2', '12 am', '12 pm', '1', 'Horario de tarde', '1'),
 ('3', '9 am', '9 pm', '5', 'Horario nocturno', '1');
-
- -- -----------------------------------------------------
-  -- Table `hoteleria`.`impuesto`
-  -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_impuesto` (
-   `PK_id_impuesto` INT NOT NULL,
-   `nombre_impuesto` VARCHAR(45) NULL DEFAULT NULL,
-   `valor_impuesto` DECIMAL NULL DEFAULT NULL,
-   `descripcion_impuesto` VARCHAR(200) NULL DEFAULT NULL,
-   `estado_impuesto` TINYINT NULL DEFAULT NULL,
-   PRIMARY KEY (`PK_id_impuesto`)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
   -- Table `hoteleria`.`tbl_metodo_de_pago`
@@ -72,12 +50,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_metodo_de_pago` (
    PRIMARY KEY (`PK_id_metodo`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
-`empresarial`.`tbl_metodo_de_pago` (
-`PK_id_metodo`,
-`nombre_metodo`,
-`descripcion_metodo`,
-`estado_metodo`
-)
+`empresarial`.`tbl_metodo_de_pago`
 VALUES
 ('1', 'Tarjeta', 'Pago con tarjeta', '1'),
 ('2', 'Efectivo', 'Pago en efectivo', '1'),
@@ -98,14 +71,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_servicio` (
    PRIMARY KEY (`PK_id_servicio`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
-`tbl_servicio` (
-`PK_id_servicio`,
-`nombre_servicio`,
-`descripcion_servicio`,
-`precio_servicio`,
-`tipo_servicio`,
-`estado_servicio`
-)
+`empresarial`.`tbl_servicio`
 VALUES
 ('1', 'Internet', '50mg', '150', '1', '1'),
 ('2','Niñera','Cuido de niños menores de 10 años','250','2','1'),
@@ -128,15 +94,7 @@ PRIMARY KEY (`PK_id_habitacion`),
 FOREIGN KEY (`PK_id_piso`) REFERENCES `tbl_piso`(`PK_id_piso`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
-`tbl_mantenimiento_habitacion` (
-`PK_id_habitacion`,
-`precio_habitacion`,
-`PK_id_piso`,
-`estado_habitacion`,
-`estado_limpieza`,
-`tipo_de_habitacion`,
-`cantidad_maxima_persona`
-)
+`empresarial`.`tbl_mantenimiento_habitacion`
 VALUES
 ('1', '250', '1', '0', '1', '1', '5'),
 ('2', '250', '4', '1', '2', '1', '6'),
@@ -159,16 +117,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_huesped` (
    PRIMARY KEY (`PK_no_identificacion`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
-`empresarial`.`tbl_huesped` (
-`PK_no_identificacion`,
-`nombre_huesped`,
-`apellido_huesped`,
-`nacionalidad_huesped`,
-`direccion_huesped`,
-`sexo_huesped`,
-`telefono_huesped`,
-`cumpleaños_huesped`
-)
+`empresarial`.`tbl_huesped`
 VALUES
 ('1','Alberto','Suarez','Mexicano','alberto@gmail.com','M','12345678','2000-6-28'),
 ('12','Luis Carlos','lee','Guatemalteco','leeluis@gmail.com','M','87654321','2000-6-28'),
@@ -188,13 +137,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_restaurante` (
    PRIMARY KEY (`PK_codigo_correlativo`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
-`empresarial`.`tbl_menu_restaurante` (
-`PK_codigo_correlativo`,
-`nombre_plato`,
-`descripcion_plato`,
-`precio_plato`,
-`estado_plato`
-)
+`empresarial`.`tbl_menu_restaurante`
 VALUES
 ('1', 'pizza', 'pizza clasica', '50', '1'),
 ('12', 'burrito', 'burrito clasico', '20', '1'),
@@ -269,19 +212,6 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
--- Table `hoteleria`.`tbl_factura`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_factura`(
-   `PK_id_factura` INT NOT NULL,
-   `fecha_emision_factura` DATE NOT NULL,
-   `PK_id_reservacion` INT NOT NULL,
-   `PK_id_asignar_servicio` INT NOT NULL,
-   `PK_id_impuesto` INT NOT NULL,
-   PRIMARY KEY (`PK_id_factura`),
-   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
-
--- -----------------------------------------------------
 -- Table `hoteleria`.`tbl_menu_orden`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
@@ -297,6 +227,9 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
    PRIMARY KEY (`PK_id_orden`),
    FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+-- FIN Hotelerìa
+-- -----------------------------------------------------
 
 -- --------------------------------------------------------------- --
 -- --------------------------------------------------------------- --
@@ -582,6 +515,7 @@ create table `empresarial`.`planilla_det`(
 	foreign key(`id_empleado`) references `empleado_contratado`(`id_empleado`)
 ) engine = InnoDB default char set=utf8mb4;
 
+-- -------------Hoteleria
 CREATE TABLE `empresarial`.`tbl_asignacion_ama_de_llave` (
 `PK_id_asignacion_ama_de_llave` INT NOT NULL,
 `PK_id_puesto` INT NOT NULL,
