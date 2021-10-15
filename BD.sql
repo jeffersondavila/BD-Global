@@ -155,7 +155,7 @@ VALUES
     `estado_tarifa` TINYINT NULL DEFAULT NULL,
     PRIMARY KEY (`PK_id_tarifa`),
     FOREIGN KEY (id_habitacion_tarifa) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
-  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `hoteleria`.`tbl_paquete_servicio`
@@ -167,7 +167,7 @@ VALUES
     PRIMARY KEY (`PK_correlativo_paquete`),
     FOREIGN KEY (id_tarifa_paquete) REFERENCES tbl_tarifa(PK_id_tarifa),
     FOREIGN KEY (id_servicio_paquete) REFERENCES tbl_servicio(PK_id_servicio)
-  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `hoteleria`.`tbl_reservacion`
@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_reservacion` (
     `estado_reservacion` TINYINT NULL DEFAULT NULL,
     PRIMARY KEY (`PK_id_reservacion`),   
     FOREIGN KEY (identificacion_huesped_reservacion) REFERENCES tbl_huesped(PK_no_identificacion)
-  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `hoteleria`.`tbl_detalle_reservacion`
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_reservacion` (
     PRIMARY KEY (`Pk_correlativo_detalle`),
     FOREIGN KEY (id_tarifa_detalle) REFERENCES tbl_tarifa(PK_id_tarifa),
     FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacion)
-  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+  ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `empresarial`.`tbl_solicitud_viaje`
@@ -1111,11 +1111,3 @@ INSERT INTO `empresarial`.`tbl_proveedor` (`PK_codigo_proveedor`, `nombre_provee
 VALUES ('1', 'serveceria gallo', 'zona 2 3-00', '51169327', '456789', 'gallo@gmial.com', '0', '1');
 INSERT INTO `empresarial`.`tbl_proveedor` (`PK_codigo_proveedor`, `nombre_proveedor`, `direccion_proveedor`, `telefono_proveedor`, `nit_proveedor`, `email_proveedor`, `saldo_proveedor`, `estatus_proveedor`) 
 VALUES ('2', 'cañareal', 'zona12 8-00', '2200800', '7890', 'cañareal@gmail.com', '0', '1');
-
-
-
-
-
-
-
-
