@@ -146,7 +146,7 @@ VALUES
 ('12345', 'tacos', 'tacos clasicos', '10', '0');
   
 -- -----------------------------------------------------
--- Table `empresarial`.`tbl_tarifa`
+-- Table `hoteleria`.`tbl_tarifa`
 -- -----------------------------------------------------
   CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tarifa` (
     `PK_id_tarifa` INT AUTO_INCREMENT NOT NULL,
@@ -157,9 +157,9 @@ VALUES
     FOREIGN KEY (id_habitacion_tarifa) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
-  -- -----------------------------------------------------
-  -- Table `empresarial`.`tbl_paquete_servicio`
-  -- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Table `hoteleria`.`tbl_paquete_servicio`
+-- -----------------------------------------------------
   CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_paquete_servicios` (
     `PK_correlativo_paquete` INT AUTO_INCREMENT NOT NULL,
     `id_tarifa_paquete` INT NOT NULL,
@@ -169,9 +169,9 @@ VALUES
     FOREIGN KEY (id_servicio_paquete) REFERENCES tbl_servicio(PK_id_servicio)
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
-  -- -----------------------------------------------------
-  -- Table `empresarial`.`tbl_reservacion`
-  -- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Table `hoteleria`.`tbl_reservacion`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_reservacion` (
     `PK_id_reservacion` INT NOT NULL,
     `fecha_reservacion` DATE NOT NULL,
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_reservacion` (
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
-  -- Table `empresarial`.`tbl_detalle_reservacion`
+-- Table `hoteleria`.`tbl_detalle_reservacion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_reservacion` (
     `Pk_correlativo_detalle` INT AUTO_INCREMENT NOT NULL,
@@ -195,6 +195,19 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_reservacion` (
     FOREIGN KEY (id_tarifa_detalle) REFERENCES tbl_tarifa(PK_id_tarifa),
     FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacion)
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+
+-- -----------------------------------------------------
+-- Table `empresarial`.`tbl_solicitud_viaje`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
+   `PK_id_solicitud` INT NOT NULL,
+   `PK_id_reservacion` INT NOT NULL,
+   `id_destino`INT NOT NULL,
+   `id_transporte` INT NOT NULL,
+   `precio_viaje` INT NOT NULL,
+   PRIMARY KEY (`Pk_id_solicitud`),
+   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
 -- Table `empresarial`.`tbl_menu_orden`
@@ -1098,3 +1111,11 @@ INSERT INTO `empresarial`.`tbl_proveedor` (`PK_codigo_proveedor`, `nombre_provee
 VALUES ('1', 'serveceria gallo', 'zona 2 3-00', '51169327', '456789', 'gallo@gmial.com', '0', '1');
 INSERT INTO `empresarial`.`tbl_proveedor` (`PK_codigo_proveedor`, `nombre_proveedor`, `direccion_proveedor`, `telefono_proveedor`, `nit_proveedor`, `email_proveedor`, `saldo_proveedor`, `estatus_proveedor`) 
 VALUES ('2', 'cañareal', 'zona12 8-00', '2200800', '7890', 'cañareal@gmail.com', '0', '1');
+
+
+
+
+
+
+
+
