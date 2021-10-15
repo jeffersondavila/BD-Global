@@ -146,7 +146,7 @@ VALUES
 ('12345', 'tacos', 'tacos clasicos', '10', '0');
   
 -- -----------------------------------------------------
--- Table `hoteleria`.`tbl_tarifa`
+-- Table `empresarial`.`tbl_tarifa`
 -- -----------------------------------------------------
   CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tarifa` (
     `PK_id_tarifa` INT AUTO_INCREMENT NOT NULL,
@@ -158,7 +158,7 @@ VALUES
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
--- Table `hoteleria`.`tbl_paquete_servicio`
+-- Table `empresarial`.`tbl_paquete_servicio`
 -- -----------------------------------------------------
   CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_paquete_servicios` (
     `PK_correlativo_paquete` INT AUTO_INCREMENT NOT NULL,
@@ -170,7 +170,7 @@ VALUES
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
--- Table `hoteleria`.`tbl_reservacion`
+-- Table `empresarial`.`tbl_reservacion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_reservacion` (
     `PK_id_reservacion` INT NOT NULL,
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_reservacion` (
   ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
--- Table `hoteleria`.`tbl_detalle_reservacion`
+-- Table `empresarial`.`tbl_detalle_reservacion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_reservacion` (
     `Pk_correlativo_detalle` INT AUTO_INCREMENT NOT NULL,
