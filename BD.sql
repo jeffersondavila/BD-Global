@@ -1278,3 +1278,51 @@ CREATE TABLE IF NOT EXISTS  `empresarial`.`tbl_balance_saldo_cliente` (
   )
   )
  ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+ 
+ -- -------------------------------------------
+-- PROCESOS
+-- -------------------------------------------
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
+   `PK_id_solicitud` INT NOT NULL,
+   `PK_id_reservacion` INT NOT NULL,
+   `id_destino`INT NOT NULL,
+   `id_transporte` INT NOT NULL,
+   `precio_viaje` INT NOT NULL,
+   PRIMARY KEY (`Pk_id_solicitud`),
+   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
+   `PK_id_orden` INT NOT NULL,
+   `PK_id_menu` INT NOT NULL,
+   `cantidad_orden` INT NOT NULL,
+   `no_mesa` INT NOT NULL,
+   `horario_orden` VARCHAR(10) NOT NULL,
+   `fecha_orden` DATE NOT NULL,
+   `PK_id_metodo_pago` INT NOT NULL,
+   `PK_id_habitacion` INT DEFAULT NULL,
+   `total_orden` INT NOT NULL,
+   PRIMARY KEY (`PK_id_orden`),
+   FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE `empresarial`.`tbl_asignacion_gobernanta` (
+`PK_id_asignacion_gobernanta` INT NOT NULL AUTO_INCREMENT,
+`PK_id_gobernanta` INT NOT NULL,
+`PK_id_ama_de_llave` INT NOT NULL,
+`estado_asignacion_gobernanta` TINYINT NOT NULL,
+PRIMARY KEY (`PK_id_asignacion_gobernanta`),
+FOREIGN KEY (`PK_id_gobernanta`) REFERENCES `tbl_empleado`(`PK_id_empleado`),
+FOREIGN KEY (`PK_id_ama_de_llave`) REFERENCES `tbl_empleado`(`PK_id_empleado`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE `empresarial`.`tbl_asignacion_limpieza` (
+`PK_id_asignacion_limpieza` INT NOT NULL,
+`PK_id_asignacion_gobernanta` INT NOT NULL,
+`PK_id_piso` INT NOT NULL,
+`PK_id_horario` INT NOT NULL,
+PRIMARY KEY (`PK_id_asignacion_limpieza`),
+FOREIGN KEY (`PK_id_asignacion_gobernanta`) REFERENCES `tbl_asignacion_gobernanta`(`PK_id_asignacion_gobernanta`),
+FOREIGN KEY (`PK_id_piso`) REFERENCES `tbl_piso`(`PK_id_piso`),
+FOREIGN KEY (`PK_id_horario`) REFERENCES `tbl_horario`(`PK_id_horario`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
