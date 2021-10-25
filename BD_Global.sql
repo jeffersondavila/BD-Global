@@ -358,7 +358,7 @@ VALUES
 ('3', 'Karla', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '0', '2021-10-19'),
 ('4', 'Esmeralda', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '1', '2021-10-19'),
 ('5', 'Yury', 'Garcia', '12345', 'karolq@gmail.com', 'Gobernanta', '0', '2021-10-19');
-select PK_id_empleado, nombre_empleado, puesto_empleado from tbl_empleado where puesto_empleado='Gobernanta' and estado_empleado='1';
+
 -- -----------------------------------------------------
 -- FIN MANTENIMIENTOS
 -- -----------------------------------------------------
