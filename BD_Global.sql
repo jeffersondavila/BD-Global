@@ -326,6 +326,39 @@ VALUES
 ('4', 'DIEGO','1'),
 ('5', 'IVAN','1');
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_puesto` (
+`PK_id_puesto` INT NOT NULL AUTO_INCREMENT,
+`nombre_puesto` VARCHAR(45) NULL DEFAULT NULL,
+`salario_puesto` VARCHAR(45) NULL DEFAULT NULL,
+PRIMARY KEY (`PK_id_puesto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO
+`empresarial`.`tbl_puesto`
+VALUES
+('1', 'Gobernanta', '1000'), ('2', 'Ama de Llave', '1000'), ('3', 'Seguridad', '1000');
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_empleado` (
+`PK_id_empleado` INT NOT NULL AUTO_INCREMENT,
+`nombre_empleado` VARCHAR(45) NULL DEFAULT NULL,
+`apellido_empleado` VARCHAR(45) NULL DEFAULT NULL,
+`dpi_empleado` VARCHAR(15) NULL DEFAULT NULL,
+`correo_empleado` VARCHAR(45) NULL DEFAULT NULL,
+`puesto_empleado` VARCHAR(15) NULL DEFAULT NULL,
+`estado_empleado` TINYINT NULL DEFAULT NULL,
+`fechacontrato_empleado` DATE NULL DEFAULT NULL,
+PRIMARY KEY (`PK_id_empleado`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO
+`empresarial`.`tbl_empleado`
+VALUES
+('1', 'Karol', 'Garcia', '12345', 'karol@gmail.com', 'Ama de Llave', '1', '2021-10-19'),
+('2', 'Darlyn', 'Garcia', '12345', 'karolq@gmail.com', 'Gobernanta', '1', '2021-10-19'),
+('3', 'Karla', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '0', '2021-10-19'),
+('4', 'Esmeralda', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '1', '2021-10-19'),
+('5', 'Yury', 'Garcia', '12345', 'karolq@gmail.com', 'Gobernanta', '0', '2021-10-19');
+
 -- -----------------------------------------------------
 -- FIN MANTENIMIENTOS
 -- -----------------------------------------------------
@@ -374,16 +407,6 @@ FOREIGN KEY (id_tarifa_detalle) REFERENCES tbl_tarifa(PK_id_tarifa),
 FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
-`PK_id_solicitud` INT NOT NULL,
-`PK_id_reservacion` INT NOT NULL,
-`id_destino`INT NOT NULL,
-`id_transporte` INT NOT NULL,
-`precio_viaje` INT NOT NULL,
-PRIMARY KEY (`Pk_id_solicitud`),
-FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
-
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
 `PK_id_orden` INT NOT NULL,
 `PK_id_menu` INT NOT NULL,
@@ -409,15 +432,24 @@ FOREIGN KEY (`PK_id_ama_de_llave`) REFERENCES `tbl_empleado`(`PK_id_empleado`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE `empresarial`.`tbl_asignacion_limpieza` (
-`PK_id_asignacion_limpieza` INT NOT NULL,
+`PK_id_asignacion_limpieza` INT NOT NULL AUTO_INCREMENT,
 `PK_id_asignacion_gobernanta` INT NOT NULL,
 `PK_id_piso` INT NOT NULL,
 `PK_id_horario` INT NOT NULL,
 `estado_asignacion_limpieza` TINYINT NOT NULL,
 PRIMARY KEY (`PK_id_asignacion_limpieza`),
-FOREIGN KEY (`PK_id_asignacion_gobernanta`) REFERENCES `tbl_asignacion_gobernanta`(`PK_id_asignacion_gobernanta`),
+FOREIGN KEY (`PK_id_asignacion_gobernanta`) REFERENCES `tbl_empleado`(`PK_id_empleado`),
 FOREIGN KEY (`PK_id_piso`) REFERENCES `tbl_piso`(`PK_id_piso`),
 FOREIGN KEY (`PK_id_horario`) REFERENCES `tbl_horario`(`PK_id_horario`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE `empresarial`.`tbl_detalle_limpieza` (
+`PK_id_detalle_limpieza` INT NOT NULL AUTO_INCREMENT,
+`id_asignacion_gobernanta` INT NOT NULL,
+`id_asignacion_limpieza` INT NOT NULL,
+PRIMARY KEY (`PK_id_detalle_limpieza`),
+FOREIGN KEY (`id_asignacion_gobernanta`) REFERENCES `tbl_asignacion_gobernanta`(`PK_id_asignacion_gobernanta`),
+FOREIGN KEY (`id_asignacion_limpieza`) REFERENCES `tbl_asignacion_limpieza`(`PK_id_asignacion_limpieza`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
  CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transporteruta` (
@@ -432,6 +464,16 @@ FOREIGN KEY (`PK_id_horario`) REFERENCES `tbl_horario`(`PK_id_horario`)
 `estatus_transporteruta` TINYINT NOT NULL,
 PRIMARY KEY (`PK_codigo_transporteruta`))
 ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
+`PK_id_solicitud` INT NOT NULL,
+`PK_id_reservacion` INT NOT NULL,
+`id_destino`INT NOT NULL,
+`id_transporte` INT NOT NULL,
+`precio_viaje` INT NOT NULL,
+PRIMARY KEY (`Pk_id_solicitud`),
+FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_inventario` (
 `PK_codigo_inventario` INT  NOT NULL,
