@@ -20,7 +20,8 @@ INSERT INTO
 VALUES
 ('1', '100', 'Habitaciones pequeñas', '1'),
 ('2', '100', 'Habitaciones medianas', '1'),
-('3', '100', 'Habitaciones grandes', '1');
+('3', '100', 'Habitaciones grandes', '1'),
+('4', '10', 'Habitaciones presidenciales', '1');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_horario` (
 `PK_id_horario` INT NOT NULL,
@@ -336,7 +337,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
 `empresarial`.`tbl_puesto`
 VALUES
-('1', 'Gobernanta', '1000'), ('2', 'Ama de Llave', '1000'), ('3', 'Seguridad', '1000');
+('1', 'Gobernanta', '1000'), 
+('2', 'Ama de Llave', '1000'), 
+('3', 'Seguridad', '1000');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_empleado` (
 `PK_id_empleado` INT NOT NULL AUTO_INCREMENT,
@@ -357,7 +360,7 @@ VALUES
 ('2', 'Darlyn', 'Garcia', '12345', 'karolq@gmail.com', 'Gobernanta', '1', '2021-10-19'),
 ('3', 'Karla', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '0', '2021-10-19'),
 ('4', 'Esmeralda', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '1', '2021-10-19'),
-('5', 'Yury', 'Garcia', '12345', 'karolq@gmail.com', 'Gobernanta', '0', '2021-10-19');
+('5', 'Yury', 'Garcia', '12345', 'karolq@gmail.com', 'Gobernanta', '1', '2021-10-19');
 
 -- -----------------------------------------------------
 -- FIN MANTENIMIENTOS
