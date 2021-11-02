@@ -10,9 +10,9 @@ USE `empresarial`;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_piso` (
 `PK_id_piso` INT NOT NULL,
-`cantidad_habitaciones_piso` INT NULL DEFAULT NULL,
-`descripcion_piso` VARCHAR(200) NULL DEFAULT NULL,
-`estado_piso` TINYINT NULL DEFAULT NULL,
+`cantidad_habitaciones_piso` INT NOT NULL,
+`descripcion_piso` VARCHAR(200) NOT NULL,
+`estado_piso` TINYINT NOT NULL,
 PRIMARY KEY (`PK_id_piso`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
@@ -25,25 +25,25 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_horario` (
 `PK_id_horario` INT NOT NULL,
-`entrada_horario` VARCHAR(10) NULL DEFAULT NULL,
-`salida_horario` VARCHAR(10) NULL DEFAULT NULL,
-`horas_extras_horario` INT NULL DEFAULT NULL,
-`descripcion_horario` VARCHAR(200) NULL DEFAULT NULL,
-`estado_horario` TINYINT NULL DEFAULT NULL,
+`entrada_horario` VARCHAR(10) NOT NULL,
+`salida_horario` VARCHAR(10) NOT NULL,
+`horas_extras_horario` INT NOT NULL,
+`descripcion_horario` VARCHAR(200) NOT NULL,
+`estado_horario` TINYINT NOT NULL,
 PRIMARY KEY (`PK_id_horario`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+ALTER TABLE `empresarial`.`tbl_horario` DROP COLUMN `horas_extras_horario`;
 INSERT INTO 
 `empresarial`.`tbl_horario` 
 VALUES 
-('1', '8 am', '8 pm', '8', 'Horario matutino', '1'),
-('2', '12 am', '12 pm', '1', 'Horario de tarde', '1'),
-('3', '9 am', '9 pm', '5', 'Horario nocturno', '1');
+('1', '1 am', '9 am', 'Horario matutino', '1'),
+('2', '8 am', '4 pm', 'Horario de tarde', '1');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_metodo_de_pago` (
 `PK_id_metodo` INT NOT NULL,
-`nombre_metodo` VARCHAR(50) NULL DEFAULT NULL,
-`descripcion_metodo` VARCHAR(100) NULL DEFAULT NULL,
-`estado_metodo` TINYINT NULL DEFAULT NULL,
+`nombre_metodo` VARCHAR(50) NOT NULL,
+`descripcion_metodo` VARCHAR(100) NOT NULL,
+`estado_metodo` TINYINT NOT NULL,
 PRIMARY KEY (`PK_id_metodo`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
@@ -57,8 +57,8 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_servicio` (
 `PK_id_servicio` INT NOT NULL,
-`nombre_servicio` VARCHAR(50) NULL DEFAULT NULL,
-`descripcion_servicio` VARCHAR(100) NULL DEFAULT NULL,
+`nombre_servicio` VARCHAR(50) NOT NULL,
+`descripcion_servicio` VARCHAR(100) NOT NULL,
 `precio_servicio` INT NOT NULL,
 `tipo_servicio` TINYINT NOT NULL,
 `estado_servicio` TINYINT NOT NULL,
@@ -75,12 +75,12 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_mantenimiento_habitacion` (
 `PK_id_habitacion` INT NOT NULL,
-`precio_habitacion` INT NULL DEFAULT NULL,
-`PK_id_piso` INT NULL DEFAULT NULL,
-`estado_habitacion` TINYINT NULL DEFAULT NULL,
-`estado_limpieza` TINYINT NULL DEFAULT NULL,
-`tipo_de_habitacion` INT NULL DEFAULT NULL,
-`cantidad_maxima_persona` INT NULL DEFAULT NULL,
+`precio_habitacion` INT NOT NULL,
+`PK_id_piso` INT NOT NULL,
+`estado_habitacion` TINYINT NOT NULL,
+`estado_limpieza` TINYINT NOT NULL,
+`tipo_de_habitacion` INT NOT NULL,
+`cantidad_maxima_persona` INT NOT NULL,
 PRIMARY KEY (`PK_id_habitacion`),
 FOREIGN KEY (`PK_id_piso`) REFERENCES `tbl_piso`(`PK_id_piso`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
@@ -95,13 +95,13 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_huesped` (
 `PK_no_identificacion` INT NOT NULL,
-`nombre_huesped` VARCHAR(50) NULL DEFAULT NULL,
-`apellido_huesped` VARCHAR(100) NULL DEFAULT NULL,
-`nacionalidad_huesped` VARCHAR(100) NULL DEFAULT NULL,
-`direccion_huesped` VARCHAR(100) NULL DEFAULT NULL,
-`sexo_huesped` VARCHAR(5) NULL DEFAULT NULL,
+`nombre_huesped` VARCHAR(50) NOT NULL,
+`apellido_huesped` VARCHAR(100) NOT NULL,
+`nacionalidad_huesped` VARCHAR(100) NOT NULL,
+`direccion_huesped` VARCHAR(100) NOT NULL,
+`sexo_huesped` VARCHAR(5) NOT NULL,
 `telefono_huesped` INT DEFAULT NULL,
-`cumpleaños_huesped` DATE NULL DEFAULT NULL,
+`cumpleaños_huesped` DATE DEFAULT NULL,
 PRIMARY KEY (`PK_no_identificacion`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
@@ -115,10 +115,10 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_restaurante` (
 `PK_codigo_correlativo` INT NOT NULL,
-`nombre_plato` VARCHAR(100) NULL DEFAULT NULL,
-`descripcion_plato` VARCHAR(100) NULL DEFAULT NULL,
+`nombre_plato` VARCHAR(100) NOT NULL,
+`descripcion_plato` VARCHAR(100) NOT NULL,
 `precio_plato` INT NOT NULL,
-`estado_plato` TINYINT NULL DEFAULT NULL,
+`estado_plato` TINYINT NOT NULL,
 PRIMARY KEY (`PK_codigo_correlativo`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
@@ -341,6 +341,15 @@ VALUES
 ('2', 'Ama de Llave', '1000'), 
 ('3', 'Seguridad', '1000');
 
+-- -----------------------------------------------------
+-- FIN MANTENIMIENTOS
+-- -----------------------------------------------------
+
+
+-- -----------------------------------------------------
+-- INICIO PROCESOS
+-- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_empleado` (
 `PK_id_empleado` INT NOT NULL AUTO_INCREMENT,
 `nombre_empleado` VARCHAR(45) NULL DEFAULT NULL,
@@ -361,15 +370,6 @@ VALUES
 ('3', 'Karla', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '0', '2021-10-19'),
 ('4', 'Esmeralda', 'Garcia', '12345', 'karolq@gmail.com', 'Ama de Llave', '1', '2021-10-19'),
 ('5', 'Yury', 'Garcia', '12345', 'karolq@gmail.com', 'Gobernanta', '1', '2021-10-19');
-
--- -----------------------------------------------------
--- FIN MANTENIMIENTOS
--- -----------------------------------------------------
-
-
--- -----------------------------------------------------
--- INICIO PROCESOS
--- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tarifa` (
 `PK_id_tarifa` INT AUTO_INCREMENT NOT NULL,
@@ -413,16 +413,18 @@ FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacio
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
 `PK_id_orden` INT NOT NULL,
 `PK_id_menu` INT NOT NULL,
+`PK_id_habitacion` INT NOT NULL,
 `cantidad_orden` INT NOT NULL,
 `no_mesa` INT NOT NULL,
 `horario_orden` VARCHAR(10) NOT NULL,
 `fecha_orden` DATE NOT NULL,
 `PK_id_metodo_pago` INT NOT NULL,
-`PK_id_habitacion` INT DEFAULT NULL,
 `total_orden` INT NOT NULL,
 PRIMARY KEY (`PK_id_orden`),
-FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
+FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo),
+FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+ALTER TABLE `empresarial`.`tbl_menu_orden` DROP COLUMN `PK_id_metodo_pago`;
 
 CREATE TABLE `empresarial`.`tbl_asignacion_gobernanta` (
 `PK_id_asignacion_gobernanta` INT NOT NULL AUTO_INCREMENT,
@@ -455,26 +457,27 @@ FOREIGN KEY (`id_asignacion_gobernanta`) REFERENCES `tbl_asignacion_gobernanta`(
 FOREIGN KEY (`id_asignacion_limpieza`) REFERENCES `tbl_asignacion_limpieza`(`PK_id_asignacion_limpieza`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
--- -----------------------------------------------------
--- Table `hoteleria`.`tbl_objetosperdidos`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_objeto_perdido` (
-  `PK_id_objeto` INT NOT NULL,
-  `PK_id_habitacion` INT NOT NULL,
-  `PK_id_ama_de_llaves` INT NOT NULL,
-  `fecha_encontrado` DATE NOT NULL,
-  `objeto` VARCHAR(50) NOT NULL,
-  `identificacion` VARCHAR(50) DEFAULT NULL,
-  `estado` TINYINT NOT NULL,
-  `Fecha_Entregado` DATE DEFAULT NULL,
-  PRIMARY KEY (`PK_id_objeto`))
+`PK_id_objeto` INT NOT NULL AUTO_INCREMENT,
+`PK_id_habitacion` INT DEFAULT NULL,
+`PK_id_ama_de_llaves` INT DEFAULT NULL,
+`fecha_encontrado` date NULL DEFAULT NULL,
+`objeto` VARCHAR(50) NULL DEFAULT NULL,
+`identificacion` VARCHAR(50) NULL DEFAULT NULL,
+`nombre` VARCHAR(50) NULL DEFAULT NULL,
+`estado` TINYINT NULL DEFAULT NULL,
+PRIMARY KEY (`PK_id_objeto`),
+FOREIGN KEY (`PK_id_habitacion`) REFERENCES `tbl_mantenimiento_habitacion`(`PK_id_habitacion`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-INSERT INTO `empresarial`.`tbl_objeto_perdido` (`PK_id_objeto`, `PK_id_habitacion`, `PK_id_ama_de_llaves`, `fecha_encontrado`, `objeto`, `identificacion`, `estado`, `Fecha_Entregado`) VALUES ('1', '1', '1', '2021-04-17', 'Telefono', '12345678', '2', '2021-04-18');
-INSERT INTO `empresarial`.`tbl_objeto_perdido` (`PK_id_objeto`, `PK_id_habitacion`, `PK_id_ama_de_llaves`, `fecha_encontrado`, `objeto`, `identificacion`, `estado`, `Fecha_Entregado`) VALUES ('2', '1', '1', '2021-04-17', 'Juguete', '123', '2', '2021-04-18');
-INSERT INTO `empresarial`.`tbl_objeto_perdido` (`PK_id_objeto`, `PK_id_habitacion`, `PK_id_ama_de_llaves`, `fecha_encontrado`, `objeto`, `identificacion`, `estado`, `Fecha_Entregado`) VALUES ('3', '1', '1', '2021-04-17', 'Computadora', 'NULL', '1', '1111-11-11');
-INSERT INTO `empresarial`.`tbl_objeto_perdido` (`PK_id_objeto`, `PK_id_habitacion`, `PK_id_ama_de_llaves`, `fecha_encontrado`, `objeto`, `identificacion`, `estado`, `Fecha_Entregado`) VALUES ('4', '1', '1', '2021-04-17', 'Telefono', '123', '2', '2021-04-18');
-INSERT INTO `empresarial`.`tbl_objeto_perdido` (`PK_id_objeto`, `PK_id_habitacion`, `PK_id_ama_de_llaves`, `fecha_encontrado`, `objeto`, `identificacion`, `estado`, `Fecha_Entregado`) VALUES ('5', '1', '1', '2021-04-20', 'Audifonos', '12345678', '2', '2021-04-21');
+INSERT INTO 
+`empresarial`.`tbl_objeto_perdido` 
+VALUES
+('1', '1', '1', '2021-04-17', 'Telefono', '12345678', 'Luis', '2'),
+('2', '1', '1', '2021-04-18', 'Juguete', 'null', 'null', '1'),
+('3', '1', '1', '2021-04-19', 'Computadora', 'null', 'null', '1'),
+('4', '1', '1', '2021-04-20', 'Telefono', 'null', 'null', '1'),
+('5', '1', '1', '2021-04-21', 'Audifonos', '124345678', 'Juan', '2');
 
  CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transporteruta` (
 `PK_codigo_transporteruta` INT  NOT NULL,
@@ -491,12 +494,13 @@ ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
 `PK_id_solicitud` INT NOT NULL,
-`PK_id_reservacion` INT NOT NULL,
-`id_destino`INT NOT NULL,
-`id_transporte` INT NOT NULL,
+`PK_id_habitacion` INT NOT NULL,
+`PK_id_transporte` INT NOT NULL,
+`destino_viaje`INT NOT NULL,
 `precio_viaje` INT NOT NULL,
 PRIMARY KEY (`Pk_id_solicitud`),
-FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
+FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion),
+FOREIGN KEY (PK_id_transporte) REFERENCES tbl_transporte(PK_codigo_transporte)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_inventario` (
