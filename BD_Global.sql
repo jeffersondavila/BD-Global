@@ -480,6 +480,19 @@ VALUES
 ('4', '1', '1', '2021-04-17', 'Telefono', '123', '2', '2021-04-18'),
 ('5', '1', '1', '2021-04-20', 'Audifonos', '12345678', '2', '2021-04-21');
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_check_in_out` (
+  `PK_correlativo` INT NOT NULL,
+  `PK_id_reservacion` INT NOT NULL,
+  `validacion_entrada` DATE NOT NULL,
+  `validacion_salida` DATE NOT NULL,
+  `PK_id_tarifa` INT NOT NULL,
+   PRIMARY KEY (`PK_correlativo`),
+   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion),
+   FOREIGN KEY (PK_id_tarifa) REFERENCES tbl_tarifa(PK_id_tarifa)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
  CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transporteruta` (
 `PK_codigo_transporteruta` INT  NOT NULL,
 `nombre_conductoruta` VARCHAR(35) NULL DEFAULT NULL,  
