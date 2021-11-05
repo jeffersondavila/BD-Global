@@ -67,11 +67,7 @@ PRIMARY KEY (`PK_id_servicio`)
 INSERT INTO
 `empresarial`.`tbl_servicio`
 VALUES
-('1', 'Internet', '50mg', '150', '1', '1'),
-('2','Niñera','Cuido de niños menores de 10 años','250','2','1'),
-('3','Acceso VIP del Restaurante','acceso VIP del restaurante durante una noche','375','2','1'),
-('4','SPA','SPA para un máximo de 10 personas','500','2','2'),
-('5','Sector para Fumadores','Amplio sector para personas puedan fumar tranquilamente','150','2','1');
+('1', 'Internet', '50mg', '150', '1', '1'),('2','Niñera','Cuido de niños menores de 10 años','250','2','1'),('3','Acceso VIP del Restaurante','acceso VIP del restaurante durante una noche','375','2','1'),('4','SPA','SPA para un máximo de 10 personas','500','1','1'),('5','Sector para Fumadores','Amplio sector para personas puedan fumar tranquilamente','150','1','1');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_mantenimiento_habitacion` (
 `PK_id_habitacion` INT NOT NULL,
@@ -87,11 +83,7 @@ FOREIGN KEY (`PK_id_piso`) REFERENCES `tbl_piso`(`PK_id_piso`)
 INSERT INTO
 `empresarial`.`tbl_mantenimiento_habitacion`
 VALUES
-('1', '250', '1', '0', '1', '1', '5'),
-('2', '250', '4', '1', '2', '1', '6'),
-('3', '250', '1', '0', '1', '2', '7'),
-('4', '250', '4', '1', '2', '2', '8'),
-('5', '250', '1', '0', '1', '2', '9');
+('1', '250', '1', '0', '1', '1', '5'),('2', '250', '4', '1', '2', '1', '6'),('3', '250', '1', '0', '1', '2', '7'),('4', '250', '4', '1', '2', '2', '8'),('5', '250', '1', '0', '1', '2', '9');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_huesped` (
 `PK_no_identificacion` INT NOT NULL,
@@ -107,11 +99,7 @@ PRIMARY KEY (`PK_no_identificacion`)
 INSERT INTO
 `empresarial`.`tbl_huesped`
 VALUES
-('1','Alberto','Suarez','Mexicano','alberto@gmail.com','M','12345678','2000-6-28'),
-('12','Luis Carlos','lee','Japones','leeluis@gmail.com','M','87654321','2000-6-28'),
-('123','Leonel','Gomez','Nigeriano','leo@gmail.com','M','123456789','2000-6-28'),
-('1234','Jefferson','Davila','Aleman','jeff@gmail.com','M','612345678','2000-6-28'),
-('12345','Gerson','Dominguez','Chileno','meda@gmail.com','M','1234585678','2000-6-28');
+('1','Alberto','Suarez','Mexicano','alberto@gmail.com','M','12345678','2000-6-28'),('12','Luis Carlos','lee','Japones','leeluis@gmail.com','M','87654321','2000-6-28'),('123','Leonel','Gomez','Nigeriano','leo@gmail.com','M','123456789','2000-6-28'),('1234','Jefferson','Davila','Aleman','jeff@gmail.com','M','612345678','2000-6-28'),('12345','Gerson','Dominguez','Chileno','meda@gmail.com','M','1234585678','2000-6-28');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_restaurante` (
 `PK_codigo_correlativo` INT NOT NULL,
@@ -121,14 +109,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_restaurante` (
 `estado_plato` TINYINT NOT NULL,
 PRIMARY KEY (`PK_codigo_correlativo`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
-INSERT INTO
-`empresarial`.`tbl_menu_restaurante`
-VALUES
-('1', 'pizza', 'pizza clasica', '50', '1'),
-('12', 'burrito', 'burrito clasico', '20', '1'),
-('123','hamburguesa','hamburguesa clasica','30','0'),
-('1234', 'lasaña', 'lasaña clasica', '20', '0'),
-('12345', 'tacos', 'tacos clasicos', '10', '0');
+INSERT INTO `empresarial`.`tbl_menu_restaurante` VALUES ('1', 'pizza', 'pizza clasica', '50', '1'),('12', 'burrito', 'burrito clasico', '20', '1'),('123','hamburguesa','hamburguesa clasica','30','0'),('1234', 'lasaña', 'lasaña clasica', '20', '0'),('12345', 'tacos', 'tacos clasicos', '10', '0');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_linea` (
 `PK_codigo_linea` INT  NOT NULL,
@@ -246,6 +227,16 @@ VALUES
 ('1', '1', '1', '10', '2021/10/5', '2021/10/2', '1'),
 ('2', '2', '2', '20', '2021/8/15', '2021/9/30', '1'),
 ('3', '3', '3', '30', '2021/7/5', '2021/8/10', '1');
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_ingredientes_menu` (
+`PK_codigo_correlativo` INT AUTO_INCREMENT NOT NULL,
+`id_plato_menu` INT NOT NULL,
+`id_codigo_producto` INT NOT NULL,
+`cantidad_ingrediente` FLOAT NOT NULL,
+PRIMARY KEY (`PK_codigo_correlativo`),
+FOREIGN KEY (`id_plato_menu`) REFERENCES `tbl_menu_restaurante`(`PK_codigo_correlativo`),
+FOREIGN KEY (`id_codigo_producto`) REFERENCES `tbl_producto`(`PK_codigo_producto`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_proveedor` (
 `PK_codigo_proveedor` INT NOT NULL,
@@ -390,11 +381,12 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_deposito` (
- `Codigo_CuentaHabiente` varchar(10) NOT NULL,
-  `Balance` varchar(100) NOT NULL,
-  `Transaccion` varchar(100) NOT NULL,
-  `fecha` DATE,
-    PRIMARY KEY (`Codigo_CuentaHabiente`),
+`ID_DOCUMENTO` INT NOT NULL AUTO_INCREMENT,
+ `Codigo_CuentaHabiente` VARCHAR(10) NOT NULL,
+  `Balance` VARCHAR(100) NOT NULL,
+  `Transaccion` VARCHAR(100) NOT NULL,
+  `fecha` DATE NOT NULL,
+    PRIMARY KEY (`ID_DOCUMENTO`),
      FOREIGN KEY (`Codigo_CuentaHabiente`)
     REFERENCES `empresarial1`.`bl_cuentahabiente` (`Codigo_CuentaHabiente`))
 ENGINE = InnoDB
@@ -482,6 +474,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tarifa` (
 PRIMARY KEY (`PK_id_tarifa`),
 FOREIGN KEY (id_habitacion_tarifa) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO `tbl_tarifa` VALUES ('1', '1', 'BARATA HABITACIÓN 1', '1'), ('2', '2', 'BARATA HABITACIÓN 2', '1'), ('3', '3', 'BARATA HABITACIÓN 3', '1'), ('4', '4', 'CARA HABITACIÓN 4', '1');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_paquete_servicios` (
 `PK_correlativo_paquete` INT AUTO_INCREMENT NOT NULL,
@@ -491,6 +484,7 @@ PRIMARY KEY (`PK_correlativo_paquete`),
 FOREIGN KEY (id_tarifa_paquete) REFERENCES tbl_tarifa(PK_id_tarifa),
 FOREIGN KEY (id_servicio_paquete) REFERENCES tbl_servicio(PK_id_servicio)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO `tbl_paquete_servicios` VALUES ('1', '1', '1'), ('2', '2', '1'), ('3', '3', '1'), ('4', '3', '5'), ('5', '4', '1'), ('6', '4', '4'), ('7', '4', '5');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_reservacion` (
 `PK_id_reservacion` INT NOT NULL,
@@ -503,6 +497,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_reservacion` (
 PRIMARY KEY (`PK_id_reservacion`),   
 FOREIGN KEY (identificacion_huesped_reservacion) REFERENCES tbl_huesped(PK_no_identificacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO `tbl_reservacion` VALUES ('1', '2021-11-05', '2021-11-05', '2021-11-12', '1', '2', '1'), ('2', '2021-11-05', '2021-11-05', '2021-11-12', '12345', '2', '1');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_reservacion` (
 `Pk_correlativo_detalle` INT AUTO_INCREMENT NOT NULL,
@@ -512,6 +507,7 @@ PRIMARY KEY (`Pk_correlativo_detalle`),
 FOREIGN KEY (id_tarifa_detalle) REFERENCES tbl_tarifa(PK_id_tarifa),
 FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO `tbl_detalle_reservacion` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '3'), ('4', '2', '4');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
 `PK_id_orden` INT AUTO_INCREMENT,
@@ -528,6 +524,16 @@ FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo),
 FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 ALTER TABLE `empresarial`.`tbl_menu_orden` DROP COLUMN `PK_id_metodo_pago`;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cocina_restaurante` (
+`Pk_correlativo_cocina` INT AUTO_INCREMENT NOT NULL,
+`hora_despacho` TIME NOT NULL,
+`id_orden` INT NOT NULL,
+`PK_id_menu` INT NOT NULL,
+PRIMARY KEY (`Pk_correlativo_cocina`),
+FOREIGN KEY (id_orden) REFERENCES tbl_menu_orden(PK_id_orden),
+FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE `empresarial`.`tbl_asignacion_gobernanta` (
 `PK_id_asignacion_gobernanta` INT NOT NULL AUTO_INCREMENT,
@@ -587,10 +593,11 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_check_in_out` (
   `PK_id_reservacion` INT NOT NULL,
   `validacion_entrada` DATE NOT NULL,
   `validacion_salida` DATE NOT NULL,
-  `PK_id_tarifa` INT NOT NULL,
+  `id_tarifa` INT NOT NULL,
+  `id_habitacion` INT NOT NULL,
+  `estado` INT NOT NULL,
    PRIMARY KEY (`PK_correlativo`),
-   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion),
-   FOREIGN KEY (PK_id_tarifa) REFERENCES tbl_tarifa(PK_id_tarifa)
+   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -1124,7 +1131,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transaccionbancaria` (
   `Codigo_Transaccion` INT NOT NULL AUTO_INCREMENT,
-  `Fecha_Transaccion` VARCHAR(100) NOT NULL,
+  `Fecha_Transaccion` DATE (100) NOT NULL,
   `Beneficiario` VARCHAR(100) NOT NULL,
   `Cuenta_Bancaria` INT NOT NULL,
   `Tipo_Transaccion` INT NOT NULL,
@@ -1143,10 +1150,10 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioEncabezado` (
 	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    Documento varchar(50),
-    fecha date,
-    monto float,
-    Detalle varchar(80),
+    Documento VARCHAR(50) NOT NULL,
+    fecha DATE NOT NULL,
+    monto FLOAT NOT NULL,
+    Detalle VARCHAR(100) NOT NULL,
    PRIMARY KEY (`id_movEnc`),
      CONSTRAINT `tbl_MovimientoBancarioEncabezadotbl_concepto1`
     FOREIGN KEY (`Documento`) REFERENCES `bl_concepto` (`nombre_concepto`))
@@ -1157,9 +1164,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioDETALLE` (
 	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    codigo_concepto varchar(100),
-    CREDITO float,
-	DEBITO float, 
+    codigo_concepto VARCHAR(10) NOT NULL,
+    CREDITO FLOAT NOT NULL,
+	DEBITO FLOAT NOT NULL, 
    PRIMARY KEY (`id_movEnc`,`codigo_concepto`),
     FOREIGN KEY (`id_movEnc`) REFERENCES `bl_MovimientoBancarioEncabezado` (`id_movEnc`),
     FOREIGN KEY (`codigo_concepto`) REFERENCES `bl_concepto` (`nombre_concepto`))
@@ -1174,12 +1181,12 @@ DEFAULT CHARACTER SET = utf8mb4;
 --
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeCredito` (
-  `NumeroDeDocumento` varchar(100) NOT NULL,
-  `NumeroDeCuenta` varchar(100) NOT NULL,
-  `Beneficiario` varchar(100) NOT NULL,
-  `Fecha` varchar(100) NOT NULL,
-  `MontoPositivo` varchar(100) NOT NULL,
-  `Descripcion` varchar(100) NOT NULL,
+  `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
+  `NumeroDeCuenta` VARCHAR(100) NOT NULL,
+  `Beneficiario` VARCHAR(100) NOT NULL,
+  `Fecha` VARCHAR(100) NOT NULL,
+  `MontoPositivo` VARCHAR(100) NOT NULL,
+  `Descripcion` VARCHAR(100) NOT NULL,
    PRIMARY KEY (`NumeroDeDocumento`),
      CONSTRAINT `ftbl_NotasDeCreditotbl_cuentabancaria1`
     FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
@@ -1190,12 +1197,12 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Estructura de tabla para la tabla `NotasDeCredito`
 --
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeDebito` (
-  `NumeroDeDocumento` varchar(100) NOT NULL,
-  `NumeroDeCuenta` varchar(100) NOT NULL,
-  `Beneficiario` varchar(100) NOT NULL,
-  `Fecha` varchar(100) NOT NULL,
-  `MontoNegativo` varchar(100) NOT NULL,
-  `Descripcion` varchar(100) NOT NULL,
+  `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
+  `NumeroDeCuenta` VARCHAR(100) NOT NULL,
+  `Beneficiario` VARCHAR(100) NOT NULL,
+  `Fecha` VARCHAR(100) NOT NULL,
+  `MontoNegativo` VARCHAR(100) NOT NULL,
+  `Descripcion` VARCHAR(100) NOT NULL,
    PRIMARY KEY (`NumeroDeDocumento`),
      CONSTRAINT `tbl_NotasDeDebitotbl_cuentabancaria1`
     FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
