@@ -390,11 +390,12 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_deposito` (
- `Codigo_CuentaHabiente` varchar(10) NOT NULL,
-  `Balance` varchar(100) NOT NULL,
-  `Transaccion` varchar(100) NOT NULL,
+`ID_DOCUMENTO` INT NOT NULL AUTO_INCREMENT,
+ `Codigo_CuentaHabiente` VARCHAR(10) NOT NULL,
+  `Balance` VARCHAR(100) NOT NULL,
+  `Transaccion` VARCHAR(100) NOT NULL,
   `fecha` DATE,
-    PRIMARY KEY (`Codigo_CuentaHabiente`),
+    PRIMARY KEY (`ID_DOCUMENTO`),
      FOREIGN KEY (`Codigo_CuentaHabiente`)
     REFERENCES `empresarial1`.`bl_cuentahabiente` (`Codigo_CuentaHabiente`))
 ENGINE = InnoDB
@@ -1143,10 +1144,10 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioEncabezado` (
 	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    Documento varchar(50),
-    fecha date,
-    monto float,
-    Detalle varchar(80),
+    Documento VARCHAR(50),
+    fecha DATE,
+    monto FLOAT,
+    Detalle VARCHAR(80),
    PRIMARY KEY (`id_movEnc`),
      CONSTRAINT `tbl_MovimientoBancarioEncabezadotbl_concepto1`
     FOREIGN KEY (`Documento`) REFERENCES `bl_concepto` (`nombre_concepto`))
@@ -1157,9 +1158,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioDETALLE` (
 	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    codigo_concepto varchar(100),
-    CREDITO float,
-	DEBITO float, 
+    codigo_concepto VARCHAR(100),
+    CREDITO FLOAT,
+	DEBITO FLOAT, 
    PRIMARY KEY (`id_movEnc`,`codigo_concepto`),
     FOREIGN KEY (`id_movEnc`) REFERENCES `bl_MovimientoBancarioEncabezado` (`id_movEnc`),
     FOREIGN KEY (`codigo_concepto`) REFERENCES `bl_concepto` (`nombre_concepto`))
@@ -1174,12 +1175,12 @@ DEFAULT CHARACTER SET = utf8mb4;
 --
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeCredito` (
-  `NumeroDeDocumento` varchar(100) NOT NULL,
-  `NumeroDeCuenta` varchar(100) NOT NULL,
-  `Beneficiario` varchar(100) NOT NULL,
-  `Fecha` varchar(100) NOT NULL,
-  `MontoPositivo` varchar(100) NOT NULL,
-  `Descripcion` varchar(100) NOT NULL,
+  `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
+  `NumeroDeCuenta` VARCHAR(100) NOT NULL,
+  `Beneficiario` VARCHAR(100) NOT NULL,
+  `Fecha` VARCHAR(100) NOT NULL,
+  `MontoPositivo` VARCHAR(100) NOT NULL,
+  `Descripcion` VARCHAR(100) NOT NULL,
    PRIMARY KEY (`NumeroDeDocumento`),
      CONSTRAINT `ftbl_NotasDeCreditotbl_cuentabancaria1`
     FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
@@ -1190,12 +1191,12 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Estructura de tabla para la tabla `NotasDeCredito`
 --
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeDebito` (
-  `NumeroDeDocumento` varchar(100) NOT NULL,
-  `NumeroDeCuenta` varchar(100) NOT NULL,
-  `Beneficiario` varchar(100) NOT NULL,
-  `Fecha` varchar(100) NOT NULL,
-  `MontoNegativo` varchar(100) NOT NULL,
-  `Descripcion` varchar(100) NOT NULL,
+  `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
+  `NumeroDeCuenta` VARCHAR(100) NOT NULL,
+  `Beneficiario` VARCHAR(100) NOT NULL,
+  `Fecha` VARCHAR(100) NOT NULL,
+  `MontoNegativo` VARCHAR(100) NOT NULL,
+  `Descripcion` VARCHAR(100) NOT NULL,
    PRIMARY KEY (`NumeroDeDocumento`),
      CONSTRAINT `tbl_NotasDeDebitotbl_cuentabancaria1`
     FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
