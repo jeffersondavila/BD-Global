@@ -341,6 +341,7 @@ VALUES
 ('2', 'Ama de Llave', '1000'), 
 ('3', 'Seguridad', '1000');
 
+<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_moneda` (
   `Codigo_Moneda` INT NOT NULL AUTO_INCREMENT,
   `Nombre_Moneda` VARCHAR(100) NOT NULL,
@@ -441,6 +442,8 @@ PRIMARY KEY (`id_planillaenc`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
+=======
+>>>>>>> 25a03e3687522d269957094df562d76d91bd518f
 -- -----------------------------------------------------
 -- FIN MANTENIMIENTOS
 -- -----------------------------------------------------
