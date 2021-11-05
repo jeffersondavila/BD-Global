@@ -390,11 +390,13 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_deposito` (
-  `Codigo_CuentaHabiente` INT NOT NULL AUTO_INCREMENT,
-  `Balance` VARCHAR(100) NOT NULL,
-  `Transaccion` VARCHAR(100) NOT NULL,
-  `fecha` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`Codigo_CuentaHabiente`))
+ `Codigo_CuentaHabiente` varchar(10) NOT NULL,
+  `Balance` varchar(100) NOT NULL,
+  `Transaccion` varchar(100) NOT NULL,
+  `fecha` DATE,
+    PRIMARY KEY (`Codigo_CuentaHabiente`),
+     FOREIGN KEY (`Codigo_CuentaHabiente`)
+    REFERENCES `empresarial1`.`bl_cuentahabiente` (`Codigo_CuentaHabiente`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -1107,19 +1109,16 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cheque` (
-  `Numero_Cheque` INT NOT NULL AUTO_INCREMENT,
+   `Numero_Cheque` INT NOT NULL AUTO_INCREMENT,
   `Fecha_Cheque` DATE NOT NULL,
   `FK_Banco` INT NOT NULL,
-  `FK_Cuenta` INT NOT NULL,
   `FK_Cuentahabiente` INT NOT NULL,
   `Monto_Cheque` FLOAT(10,2) NOT NULL,
   PRIMARY KEY (`Numero_Cheque`),
     FOREIGN KEY (`FK_Banco`)
-    REFERENCES `empresarial`.`tbl_banco` (`Codigo_Banco`),
-    FOREIGN KEY (`FK_Cuenta`)
-    REFERENCES `empresarial`.`tbl_cuentabancaria` (`Numero_CuentaBancaria`),
+    REFERENCES `empresarial1`.`tbl_banco` (`Codigo_Banco`),
     FOREIGN KEY (`FK_Cuentahabiente`)
-    REFERENCES `empresarial`.`tbl_cuentahabiente` (`Codigo_CuentaHabiente`))
+    REFERENCES `empresarial1`.`tbl_cuentahabiente` (`Codigo_CuentaHabiente`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -1136,6 +1135,70 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transaccionbancaria` (
     REFERENCES `empresarial`.`tbl_tipotransaccion` (`Codigo_TipoTransaccion`),
     FOREIGN KEY (`Cuenta_Bancaria`)
     REFERENCES `empresarial`.`tbl_cuentabancaria` (`Numero_CuentaBancaria`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+
+
+CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioEncabezado` (
+	id_movEnc INT NOT NULL AUTO_INCREMENT,
+    Documento varchar(50),
+    fecha date,
+    monto float,
+    Detalle varchar(80),
+   PRIMARY KEY (`id_movEnc`),
+     CONSTRAINT `tbl_MovimientoBancarioEncabezadotbl_concepto1`
+    FOREIGN KEY (`Documento`) REFERENCES `bl_concepto` (`nombre_concepto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- drop table mov_bancDet;
+
+CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioDETALLE` (
+	id_movEnc INT NOT NULL AUTO_INCREMENT,
+    codigo_concepto varchar(100),
+    CREDITO float,
+	DEBITO float, 
+   PRIMARY KEY (`id_movEnc`,`codigo_concepto`),
+    FOREIGN KEY (`id_movEnc`) REFERENCES `bl_MovimientoBancarioEncabezado` (`id_movEnc`),
+    FOREIGN KEY (`codigo_concepto`) REFERENCES `bl_concepto` (`nombre_concepto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `NotasDeCredito`
+--
+
+CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeCredito` (
+  `NumeroDeDocumento` varchar(100) NOT NULL,
+  `NumeroDeCuenta` varchar(100) NOT NULL,
+  `Beneficiario` varchar(100) NOT NULL,
+  `Fecha` varchar(100) NOT NULL,
+  `MontoPositivo` varchar(100) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+   PRIMARY KEY (`NumeroDeDocumento`),
+     CONSTRAINT `ftbl_NotasDeCreditotbl_cuentabancaria1`
+    FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+--
+-- Estructura de tabla para la tabla `NotasDeCredito`
+--
+CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeDebito` (
+  `NumeroDeDocumento` varchar(100) NOT NULL,
+  `NumeroDeCuenta` varchar(100) NOT NULL,
+  `Beneficiario` varchar(100) NOT NULL,
+  `Fecha` varchar(100) NOT NULL,
+  `MontoNegativo` varchar(100) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+   PRIMARY KEY (`NumeroDeDocumento`),
+     CONSTRAINT `tbl_NotasDeDebitotbl_cuentabancaria1`
+    FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
