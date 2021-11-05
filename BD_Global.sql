@@ -490,10 +490,11 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_check_in_out` (
   `PK_id_reservacion` INT NOT NULL,
   `validacion_entrada` DATE NOT NULL,
   `validacion_salida` DATE NOT NULL,
-  `PK_id_tarifa` INT NOT NULL,
+  `id_tarifa` INT NOT NULL,
+  `id_habitacion` INT NOT NULL,
+  `estado` INT NOT NULL,
    PRIMARY KEY (`PK_correlativo`),
-   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion),
-   FOREIGN KEY (PK_id_tarifa) REFERENCES tbl_tarifa(PK_id_tarifa)
+   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
