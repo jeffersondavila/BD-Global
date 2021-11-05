@@ -394,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_deposito` (
  `Codigo_CuentaHabiente` VARCHAR(10) NOT NULL,
   `Balance` VARCHAR(100) NOT NULL,
   `Transaccion` VARCHAR(100) NOT NULL,
-  `fecha` DATE,
+  `fecha` DATE NOT NULL,
     PRIMARY KEY (`ID_DOCUMENTO`),
      FOREIGN KEY (`Codigo_CuentaHabiente`)
     REFERENCES `empresarial1`.`bl_cuentahabiente` (`Codigo_CuentaHabiente`))
@@ -1125,7 +1125,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transaccionbancaria` (
   `Codigo_Transaccion` INT NOT NULL AUTO_INCREMENT,
-  `Fecha_Transaccion` VARCHAR(100) NOT NULL,
+  `Fecha_Transaccion` DATE (100) NOT NULL,
   `Beneficiario` VARCHAR(100) NOT NULL,
   `Cuenta_Bancaria` INT NOT NULL,
   `Tipo_Transaccion` INT NOT NULL,
@@ -1144,10 +1144,10 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioEncabezado` (
 	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    Documento VARCHAR(50),
-    fecha DATE,
-    monto FLOAT,
-    Detalle VARCHAR(80),
+    Documento VARCHAR(50) NOT NULL,
+    fecha DATE NOT NULL,
+    monto FLOAT NOT NULL,
+    Detalle VARCHAR(100) NOT NULL,
    PRIMARY KEY (`id_movEnc`),
      CONSTRAINT `tbl_MovimientoBancarioEncabezadotbl_concepto1`
     FOREIGN KEY (`Documento`) REFERENCES `bl_concepto` (`nombre_concepto`))
@@ -1158,9 +1158,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioDETALLE` (
 	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    codigo_concepto VARCHAR(100),
-    CREDITO FLOAT,
-	DEBITO FLOAT, 
+    codigo_concepto VARCHAR(10) NOT NULL,
+    CREDITO FLOAT NOT NULL,
+	DEBITO FLOAT NOT NULL, 
    PRIMARY KEY (`id_movEnc`,`codigo_concepto`),
     FOREIGN KEY (`id_movEnc`) REFERENCES `bl_MovimientoBancarioEncabezado` (`id_movEnc`),
     FOREIGN KEY (`codigo_concepto`) REFERENCES `bl_concepto` (`nombre_concepto`))
