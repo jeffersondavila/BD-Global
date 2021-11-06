@@ -509,11 +509,21 @@ FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacio
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO `tbl_detalle_reservacion` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '3'), ('4', '2', '4');
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_servicioextra` (
+`Pk_correlativo_detalle` INT AUTO_INCREMENT NOT NULL,
+`id_reservacion` INT NOT NULL,
+`id_servicio` INT NOT NULL,
+PRIMARY KEY (`Pk_correlativo_detalle`),
+FOREIGN KEY (id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion),
+FOREIGN KEY (id_servicio) REFERENCES tbl_servicio(PK_id_servicio)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden_encabezado`(
 `PK_id_orden_encabezado` INT AUTO_INCREMENT,
 `id_habitacion` INT NOT NULL,
 `mesa_orden` VARCHAR(10) NOT NULL,
-`estado_orden` TINYINT NOT NULL,
+`fecha_orden` DATE NOT NULL,
+`horario_orden` TIME NOT NULL,
 PRIMARY KEY (`PK_id_orden_encabezado`),
 FOREIGN KEY (id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
@@ -523,8 +533,6 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden_detalle`(
 `id_orden_encabezado` INT NOT NULL,
 `id_menu` INT NOT NULL,
 `cantidad_orden` INT NOT NULL,
-`fecha_orden` VARCHAR(10) NOT NULL,
-`horario_orden` VARCHAR(10) NOT NULL,
 `estado_orden` TINYINT NOT NULL,
 PRIMARY KEY (`PK_id_orden_detalle`),
 FOREIGN KEY (id_orden_encabezado) REFERENCES tbl_menu_orden_encabezado(PK_id_orden_encabezado),
@@ -1005,45 +1013,6 @@ PRIMARY KEY (
 `PK_codigo_salgo_cliente`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
--- --------------------------------------------------------
--- Estructura de tabla para la tabla `ConciliacionBancaria`
--- --------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_ConciliacionBancariaEncabezado` (
-`No_ConciliacionBan` INT NOT NULL AUTO_INCREMENT,
-`NumeroCuentaB` VARCHAR(100) NOT NULL,
-`FechaInicio` DATE NOT NULL,
-`FechaFinal` DATE NOT NULL,
-`NombreBanco` VARCHAR(100) NOT NULL,
-`SaldoAnteriorB` FLOAT NOT NULL,
-`TotalDebito` FLOAT NOT NULL,
-`TotalCredito` FLOAT NOT NULL,
-`SaldoContable` FLOAT NOT NULL,
-PRIMARY KEY (`No_ConciliacionBan`),
-CONSTRAINT `tbl_ConciliacionBancariaEncabezado_cuentabancaria1`
-FOREIGN KEY (`NumeroCuentaB`) REFERENCES `tbl_cuentabancaria` (`Numero_CuentaBancaria`),
-FOREIGN KEY (`NombreBanco`) REFERENCES `tbl_banco` (`Nombre_Banco`),
-FOREIGN KEY (`SaldoAnteriorB`)REFERENCES `tbl_cuentabancaria`(`Saldo_Cuenta`)
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_ConciliacionBancariaDetalle` (
-`No_ConciliacionBan2` INT NOT NULL AUTO_INCREMENT,
-`NumeroConcepto` VARCHAR(100) NOT NULL,
-`Fecha` DATE NOT NULL,
-`Movimiento` VARCHAR(100) NOT NULL,
-`CreditoC` FLOAT NOT NULL,
-`DebitoC` FLOAT NOT NULL,
-`SaldoConciliacion` FLOAT NOT NULL,
-PRIMARY KEY (`No_ConciliacionBan2`),
-CONSTRAINT `tbl_ConciliacionBancariaDetalle_NumeroConcepto1`
-FOREIGN KEY (`codigo_concepto`) REFERENCES `tbl_concepto` (`nombre_concepto`),
-FOREIGN KEY (`Movimiento`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`id_movEnc`),
-FOREIGN KEY (`Credito`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`CREDITO`),
-FOREIGN KEY (`Debito`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`DEBITO`)
-)
-=======
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_planilla_det`(
 `id_planillaDe` INT NOT NULL AUTO_INCREMENT,
 `id_planillaenc` INT NOT NULL,
@@ -1239,45 +1208,6 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_NotasDeDebito` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
--- --------------------------------------------------------
--- Estructura de tabla para la tabla `ConciliacionBancaria`
--- --------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_ConciliacionBancariaEncabezado` (
-`No_ConciliacionBan` INT NOT NULL AUTO_INCREMENT,
-`NumeroCuentaB` VARCHAR(100) NOT NULL,
-`FechaInicio` DATE NOT NULL,
-`FechaFinal` DATE NOT NULL,
-`NombreBanco` VARCHAR(100) NOT NULL,
-`SaldoAnteriorB` FLOAT NOT NULL,
-`TotalDebito` FLOAT NOT NULL,
-`TotalCredito` FLOAT NOT NULL,
-`SaldoContable` FLOAT NOT NULL,
-PRIMARY KEY (`No_ConciliacionBan`),
-FOREIGN KEY (`NumeroCuentaB`) REFERENCES `tbl_cuentabancaria` (`Numero_CuentaBancaria`),
-FOREIGN KEY (`NombreBanco`) REFERENCES `tbl_banco` (`Nombre_Banco`),
-FOREIGN KEY (`SaldoAnteriorB`)REFERENCES `tbl_cuentabancaria`(`Saldo_Cuenta`)
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_ConciliacionBancariaDetalle` (
-`No_ConciliacionBdet` INT NOT NULL AUTO_INCREMENT,
-`NumeroConcepto` VARCHAR(100) NOT NULL,
-`Fecha` DATE NOT NULL,
-`Movimiento` VARCHAR(100) NOT NULL,
-`CreditoC` FLOAT NOT NULL,
-`DebitoC` FLOAT NOT NULL,
-`SaldoConciliacion` FLOAT NOT NULL,
-PRIMARY KEY (`No_ConciliacionBdet`),
-FOREIGN KEY(`No_ConciliacionBdet`) REFERENCES `tbl_ConciliacionBancariaEncabezado` (`No_ConciliacionBan`),
-FOREIGN KEY (`codigo_concepto`) REFERENCES `tbl_concepto` (`nombre_concepto`),
-FOREIGN KEY (`Movimiento`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`id_movEnc`),
-FOREIGN KEY (`Credito`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`CREDITO`),
-FOREIGN KEY (`Debito`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`DEBITO`)
-)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
 -- FIN PROCESOS
 -- -----------------------------------------------------
