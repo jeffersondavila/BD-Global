@@ -1248,6 +1248,7 @@ CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeDebito` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 -- --------------------------------------------------------
 -- Estructura de tabla para la tabla `ConciliacionBancaria`
@@ -1290,6 +1291,8 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 =======
 >>>>>>> parent of b4ff6f9 (Cambios en la tabla menu orden)
+=======
+>>>>>>> parent of dd72d30 (Merge pull request #36 from jeffersondavila/jeff)
 -- -----------------------------------------------------
 -- FIN PROCESOS
 -- -----------------------------------------------------
