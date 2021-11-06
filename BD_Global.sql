@@ -563,6 +563,7 @@ PRIMARY KEY (`PK_id_asignacion_gobernanta`),
 FOREIGN KEY (`PK_id_gobernanta`) REFERENCES `tbl_empleado`(`PK_id_empleado`),
 FOREIGN KEY (`PK_id_ama_de_llave`) REFERENCES `tbl_empleado`(`PK_id_empleado`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO `tbl_asignacion_gobernanta` VALUES ('1', '5', '1', '1'), ('2', '2', '4', '1'), ('3', '3', '3', '1'), ('4', '5', '2', '1'), ('5', '5', '5', '1');
 
 CREATE TABLE `empresarial`.`tbl_asignacion_limpieza` (
 `PK_id_asignacion_limpieza` INT NOT NULL AUTO_INCREMENT,
@@ -1256,6 +1257,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- ---------------------
 -- PROCESOS ALMACENADOS
 -- ---------------------
+-- ----------------------------------------------1
 DELIMITER $$
 USE `empresarial`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getValidarReservacion`(IN no_reservacion INT, IN no_tarifa INT, OUT validacion INT)
@@ -1269,7 +1271,6 @@ FROM
 empresarial.tbl_reservacion
 WHERE
 tbl_reservacion.PK_id_reservacion=no_reservacion;
-
 SELECT
 SUM(if(tbl_detalle_reservacion.id_reservacion_detalle != no_reservacion 
 OR tbl_detalle_reservacion.id_tarifa_detalle=no_tarifa, 1, 0)) INTO validacion
@@ -1284,7 +1285,19 @@ tbl_detalle_reservacion.id_tarifa_detalle=no_tarifa AND
 tbl_detalle_reservacion.id_reservacion_detalle = tbl_reservacion.PK_id_reservacion
 ;
 END$$
+DELIMITER ;
 
+-- ----------------------------------------------2
+DELIMITER $$
+USE `empresarial`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getValidacionGobernanta`(IN idGobernanta INT, OUT validacion BOOLEAN)
+BEGIN 
+DECLARE cantidadAsignaciones INT; 
+SELECT if(COUNT(PK_id_gobernanta)  < 5, TRUE, FALSE)
+INTO validacion
+FROM empresarial.tbl_asignacion_gobernanta 
+WHERE PK_id_gobernanta=idGobernanta;
+END$$
 DELIMITER ;
 
 -- -------------------------
