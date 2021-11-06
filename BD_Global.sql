@@ -460,11 +460,16 @@ DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO
 `empresarial`.`tbl_empleado`
 VALUES
-('1', 'Karol', 'Garcia', '12345', 'karol@gmail.com', '2', '1', '2021-10-19'),
-('2', 'Darlyn', 'Garcia', '12345', 'karolq@gmail.com', '1', '1', '2021-10-19'),
-('3', 'Karla', 'Garcia', '12345', 'karolq@gmail.com', '2', '0', '2021-10-19'),
+('1', 'Karol', 'Garcia', '12345', 'karol@gmail.com', '1', '1', '2021-10-19'),
+('2', 'Darlyn', 'Garcia', '12345', 'karolq@gmail.com', '2', '1', '2021-10-19'),
+('3', 'Karla', 'Garcia', '12345', 'karolq@gmail.com', '2', '1', '2021-10-19'),
 ('4', 'Esmeralda', 'Garcia', '12345', 'karolq@gmail.com', '2', '1', '2021-10-19'),
-('5', 'Yury', 'Garcia', '12345', 'karolq@gmail.com', '1', '1', '2021-10-19');
+('5', 'Yury', 'Garcia', '12345', 'karolq@gmail.com', '2', '1', '2021-10-19'),
+('6', 'karmen', 'Garcia', '12345', 'karol@gmail.com', '1', '1', '2021-10-19'),
+('7', 'tulio', 'Garcia', '12345', 'karolq@gmail.com', '2', '1', '2021-10-19'),
+('8', 'herbert', 'Garcia', '12345', 'karolq@gmail.com', '2', '1', '2021-10-19'),
+('9', 'luis', 'Garcia', '12345', 'karolq@gmail.com', '2', '1', '2021-10-19'),
+('10', 'nicolas', 'Garcia', '12345', 'karolq@gmail.com', '1', '1', '2021-10-19');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tarifa` (
 `PK_id_tarifa` INT AUTO_INCREMENT NOT NULL,
@@ -1247,3 +1252,64 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
 -- FIN PROCESOS
 -- -----------------------------------------------------
+
+-- ---------------------
+-- PROCESOS ALMACENADOS
+-- ---------------------
+DELIMITER $$
+USE `empresarial`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getValidarReservacion`(IN no_reservacion INT, IN no_tarifa INT, OUT validacion INT)
+BEGIN
+DECLARE fecha_inicio, fecha_fin DATE;
+SELECT
+tbl_reservacion.fecha_entrada_reservacion, tbl_reservacion.fecha_salida_reservacion
+INTO
+fecha_inicio, fecha_fin
+FROM 
+empresarial.tbl_reservacion
+WHERE
+tbl_reservacion.PK_id_reservacion=no_reservacion;
+
+SELECT
+SUM(if(tbl_detalle_reservacion.id_reservacion_detalle != no_reservacion 
+OR tbl_detalle_reservacion.id_tarifa_detalle=no_tarifa, 1, 0)) INTO validacion
+FROM 
+empresarial.tbl_detalle_reservacion, empresarial.tbl_reservacion
+WHERE
+tbl_detalle_reservacion.id_tarifa_detalle=no_tarifa AND
+tbl_detalle_reservacion.id_reservacion_detalle = tbl_reservacion.PK_id_reservacion AND
+(tbl_reservacion.fecha_entrada_reservacion BETWEEN fecha_inicio AND fecha_fin) OR 
+(tbl_reservacion.fecha_salida_reservacion BETWEEN fecha_inicio AND fecha_fin) AND
+tbl_detalle_reservacion.id_tarifa_detalle=no_tarifa AND
+tbl_detalle_reservacion.id_reservacion_detalle = tbl_reservacion.PK_id_reservacion
+;
+END$$
+
+DELIMITER ;
+
+-- -------------------------
+-- FUNCIONES ALMACENADAS
+-- -------------------------
+DELIMITER $$
+USE `empresarial`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `getImpuestoTarifa`(no_tarifa INT) RETURNS float
+BEGIN
+DECLARE ImpuestoTarifa, totalServicios, totalHabitacion, noTarifa FLOAT;
+SELECT 
+tbl_tarifa.PK_id_tarifa, 
+sum(tbl_servicio.precio_servicio) as total_servicios, 
+max(tbl_mantenimiento_habitacion.precio_habitacion) as total_habitacion
+INTO noTarifa, totalServicios, totalHabitacion
+FROM empresarial.tbl_tarifa, empresarial.tbl_paquete_servicios, 
+empresarial.tbl_servicio, empresarial.tbl_mantenimiento_habitacion
+
+WHERE tbl_tarifa.PK_id_tarifa=no_tarifa AND tbl_paquete_servicios.id_tarifa_paquete = PK_id_tarifa
+AND tbl_servicio.PK_id_servicio = tbl_paquete_servicios.id_servicio_paquete 
+AND tbl_mantenimiento_habitacion.PK_id_habitacion = tbl_tarifa.id_habitacion_tarifa
+GROUP BY PK_id_tarifa;
+
+SELECT sum(totalServicios+totalHabitacion)*0.10 into ImpuestoTarifa;
+RETURN ImpuestoTarifa;
+END$$
+
+DELIMITER ;
