@@ -509,21 +509,27 @@ FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacio
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO `tbl_detalle_reservacion` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '3'), ('4', '2', '4');
 
-CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
-`PK_id_orden` INT AUTO_INCREMENT,
-`PK_id_menu` INT NOT NULL,
-`PK_id_habitacion` INT NOT NULL,
-`cantidad_orden` INT NOT NULL,
-`no_mesa` VARCHAR(10) NOT NULL,
-`horario_orden` VARCHAR(10) NOT NULL,
-`fecha_orden` VARCHAR(10) NOT NULL,
-`PK_id_metodo_pago` INT NOT NULL,
-`total_orden` DECIMAL(10,2) NOT NULL,
-PRIMARY KEY (`PK_id_orden`),
-FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo),
-FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden_encabezado`(
+`PK_id_orden_encabezado` INT AUTO_INCREMENT,
+`id_habitacion` INT NOT NULL,
+`mesa_orden` VARCHAR(10) NOT NULL,
+`estado_orden` TINYINT NOT NULL,
+PRIMARY KEY (`PK_id_orden_encabezado`),
+FOREIGN KEY (id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
-ALTER TABLE `empresarial`.`tbl_menu_orden` DROP COLUMN `PK_id_metodo_pago`;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden_detalle`(
+`PK_id_orden_detalle` INT AUTO_INCREMENT,
+`id_orden_encabezado` INT NOT NULL,
+`id_menu` INT NOT NULL,
+`cantidad_orden` INT NOT NULL,
+`fecha_orden` VARCHAR(10) NOT NULL,
+`horario_orden` VARCHAR(10) NOT NULL,
+`estado_orden` TINYINT NOT NULL,
+PRIMARY KEY (`PK_id_orden_detalle`),
+FOREIGN KEY (id_orden_encabezado) REFERENCES tbl_menu_orden_encabezado(PK_id_orden_encabezado),
+FOREIGN KEY (id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cocina_restaurante` (
 `Pk_correlativo_cocina` INT AUTO_INCREMENT NOT NULL,
@@ -531,7 +537,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cocina_restaurante` (
 `id_orden` INT NOT NULL,
 `PK_id_menu` INT NOT NULL,
 PRIMARY KEY (`Pk_correlativo_cocina`),
-FOREIGN KEY (id_orden) REFERENCES tbl_menu_orden(PK_id_orden),
+FOREIGN KEY (id_orden) REFERENCES tbl_menu_orden_detalle(PK_id_orden_detalle),
 FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
@@ -999,6 +1005,45 @@ PRIMARY KEY (
 `PK_codigo_salgo_cliente`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `ConciliacionBancaria`
+-- --------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_ConciliacionBancariaEncabezado` (
+`No_ConciliacionBan` INT NOT NULL AUTO_INCREMENT,
+`NumeroCuentaB` VARCHAR(100) NOT NULL,
+`FechaInicio` DATE NOT NULL,
+`FechaFinal` DATE NOT NULL,
+`NombreBanco` VARCHAR(100) NOT NULL,
+`SaldoAnteriorB` FLOAT NOT NULL,
+`TotalDebito` FLOAT NOT NULL,
+`TotalCredito` FLOAT NOT NULL,
+`SaldoContable` FLOAT NOT NULL,
+PRIMARY KEY (`No_ConciliacionBan`),
+CONSTRAINT `tbl_ConciliacionBancariaEncabezado_cuentabancaria1`
+FOREIGN KEY (`NumeroCuentaB`) REFERENCES `tbl_cuentabancaria` (`Numero_CuentaBancaria`),
+FOREIGN KEY (`NombreBanco`) REFERENCES `tbl_banco` (`Nombre_Banco`),
+FOREIGN KEY (`SaldoAnteriorB`)REFERENCES `tbl_cuentabancaria`(`Saldo_Cuenta`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_ConciliacionBancariaDetalle` (
+`No_ConciliacionBan2` INT NOT NULL AUTO_INCREMENT,
+`NumeroConcepto` VARCHAR(100) NOT NULL,
+`Fecha` DATE NOT NULL,
+`Movimiento` VARCHAR(100) NOT NULL,
+`CreditoC` FLOAT NOT NULL,
+`DebitoC` FLOAT NOT NULL,
+`SaldoConciliacion` FLOAT NOT NULL,
+PRIMARY KEY (`No_ConciliacionBan2`),
+CONSTRAINT `tbl_ConciliacionBancariaDetalle_NumeroConcepto1`
+FOREIGN KEY (`codigo_concepto`) REFERENCES `tbl_concepto` (`nombre_concepto`),
+FOREIGN KEY (`Movimiento`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`id_movEnc`),
+FOREIGN KEY (`Credito`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`CREDITO`),
+FOREIGN KEY (`Debito`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`DEBITO`)
+)
+=======
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_planilla_det`(
 `id_planillaDe` INT NOT NULL AUTO_INCREMENT,
 `id_planillaenc` INT NOT NULL,
@@ -1131,56 +1176,44 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transaccionbancaria` (
   `Codigo_Transaccion` INT NOT NULL AUTO_INCREMENT,
-  `Fecha_Transaccion` DATE (100) NOT NULL,
+  `Fecha_Transaccion` DATE NOT NULL,
   `Beneficiario` VARCHAR(100) NOT NULL,
   `Cuenta_Bancaria` INT NOT NULL,
   `Tipo_Transaccion` INT NOT NULL,
   `Monto_Transaccion` VARCHAR(100) NOT NULL,
   `Concepto_Transaccion` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`Codigo_Transaccion`),
-    FOREIGN KEY (`Tipo_Transaccion`)
-    REFERENCES `empresarial`.`tbl_tipotransaccion` (`Codigo_TipoTransaccion`),
-    FOREIGN KEY (`Cuenta_Bancaria`)
-    REFERENCES `empresarial`.`tbl_cuentabancaria` (`Numero_CuentaBancaria`))
+  FOREIGN KEY (`Tipo_Transaccion`)
+  REFERENCES `empresarial`.`tbl_tipotransaccion` (`Codigo_TipoTransaccion`),
+  FOREIGN KEY (`Cuenta_Bancaria`)
+  REFERENCES `empresarial`.`tbl_cuentabancaria` (`Numero_CuentaBancaria`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
-
-
-
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioEncabezado` (
-	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    Documento VARCHAR(50) NOT NULL,
-    fecha DATE NOT NULL,
-    monto FLOAT NOT NULL,
-    Detalle VARCHAR(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_MovimientoBancarioEncabezado` (
+	`id_movEnc` INT NOT NULL AUTO_INCREMENT,
+    `Documento` VARCHAR(50) NOT NULL,
+    `fecha` DATE NOT NULL,
+    `monto` FLOAT NOT NULL,
+    `Detalle` VARCHAR(100) NOT NULL,
    PRIMARY KEY (`id_movEnc`),
      CONSTRAINT `tbl_MovimientoBancarioEncabezadotbl_concepto1`
     FOREIGN KEY (`Documento`) REFERENCES `bl_concepto` (`nombre_concepto`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
--- drop table mov_bancDet;
-
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_MovimientoBancarioDETALLE` (
-	id_movEnc INT NOT NULL AUTO_INCREMENT,
-    codigo_concepto VARCHAR(10) NOT NULL,
-    CREDITO FLOAT NOT NULL,
-	DEBITO FLOAT NOT NULL, 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_MovimientoBancarioDETALLE` (
+	`id_movEnc` INT NOT NULL AUTO_INCREMENT,
+    `codigo_concepto` VARCHAR(10) NOT NULL,
+    `CREDITO` FLOAT NOT NULL,
+	`DEBITO` FLOAT NOT NULL, 
    PRIMARY KEY (`id_movEnc`,`codigo_concepto`),
     FOREIGN KEY (`id_movEnc`) REFERENCES `bl_MovimientoBancarioEncabezado` (`id_movEnc`),
     FOREIGN KEY (`codigo_concepto`) REFERENCES `bl_concepto` (`nombre_concepto`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `NotasDeCredito`
---
-
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeCredito` (
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_NotasDeCredito` (
   `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
   `NumeroDeCuenta` VARCHAR(100) NOT NULL,
   `Beneficiario` VARCHAR(100) NOT NULL,
@@ -1193,10 +1226,7 @@ CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeCredito` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
---
--- Estructura de tabla para la tabla `NotasDeCredito`
---
-CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeDebito` (
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_NotasDeDebito` (
   `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
   `NumeroDeCuenta` VARCHAR(100) NOT NULL,
   `Beneficiario` VARCHAR(100) NOT NULL,
@@ -1208,6 +1238,7 @@ CREATE TABLE IF NOT EXISTS `empresarial1`.`tbl_NotasDeDebito` (
     FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
+
 -- -----------------------------------------------------
 -- FIN PROCESOS
 -- -----------------------------------------------------
