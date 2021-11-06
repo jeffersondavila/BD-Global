@@ -1,3 +1,5 @@
+DELIMITER $$
+USE `empresarial`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getValidarReservacion`(IN no_reservacion INT, IN no_tarifa INT, OUT validacion INT)
 BEGIN
 DECLARE fecha_inicio, fecha_fin DATE;
@@ -23,4 +25,6 @@ tbl_detalle_reservacion.id_reservacion_detalle = tbl_reservacion.PK_id_reservaci
 tbl_detalle_reservacion.id_tarifa_detalle=no_tarifa AND
 tbl_detalle_reservacion.id_reservacion_detalle = tbl_reservacion.PK_id_reservacion
 ;
-END
+END$$
+
+DELIMITER ;

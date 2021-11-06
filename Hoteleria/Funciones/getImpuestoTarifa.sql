@@ -1,3 +1,5 @@
+DELIMITER $$
+USE `empresarial`$$
 CREATE DEFINER=`root`@`localhost` FUNCTION `getImpuestoTarifa`(no_tarifa INT) RETURNS float
 BEGIN
 DECLARE ImpuestoTarifa, totalServicios, totalHabitacion, noTarifa FLOAT;
@@ -16,4 +18,6 @@ GROUP BY PK_id_tarifa;
 
 SELECT sum(totalServicios+totalHabitacion)*0.10 into ImpuestoTarifa;
 RETURN ImpuestoTarifa;
-END
+END$$
+
+DELIMITER ;
