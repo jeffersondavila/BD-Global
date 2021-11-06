@@ -332,6 +332,109 @@ VALUES
 ('2', 'Ama de Llave', '1000'), 
 ('3', 'Seguridad', '1000');
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_moneda` (
+  `Codigo_Moneda` INT NOT NULL AUTO_INCREMENT,
+  `Nombre_Moneda` VARCHAR(100) NOT NULL,
+  `Simbolo_Moneda` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_Moneda`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tipo_asiento` (
+  `Codigo_TipoAsiento` INT NOT NULL AUTO_INCREMENT,
+  `Tipo_AsientoDesc` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_TipoAsiento`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_clasificacioncuenta` (
+  `Codigo_clasificacion` INT NOT NULL AUTO_INCREMENT,
+  `Clasificacion_CuentaNombre` VARCHAR(100) NOT NULL,
+  `Descripcion_Clasificacion` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`Codigo_clasificacion`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_periodofiscal` (
+  `Codigo_PeriodoFiscal` INT NOT NULL AUTO_INCREMENT,
+  `Fecha_inicioPF` VARCHAR(100) NOT NULL,
+  `Fecha_finPF` VARCHAR(100) NOT NULL,
+  `Estado_PeriodoFiscal` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_PeriodoFiscal`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_banco` (
+  `Codigo_Banco` INT NOT NULL AUTO_INCREMENT,
+  `Nombre_Banco` VARCHAR(100) NOT NULL,
+  `Clave_Banco` VARCHAR(100) NOT NULL,
+  `Telefono_Banco` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_Banco`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tipopersona` (
+  `Codigo_TipoPersona` INT NOT NULL AUTO_INCREMENT,
+  `TipoPersona_Nombres` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_TipoPersona`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_deposito` (
+`ID_DOCUMENTO` INT NOT NULL AUTO_INCREMENT,
+ `Codigo_CuentaHabiente` VARCHAR(10) NOT NULL,
+  `Balance` VARCHAR(100) NOT NULL,
+  `Transaccion` VARCHAR(100) NOT NULL,
+  `fecha` DATE NOT NULL,
+    PRIMARY KEY (`ID_DOCUMENTO`),
+     FOREIGN KEY (`Codigo_CuentaHabiente`)
+    REFERENCES `empresarial1`.`bl_cuentahabiente` (`Codigo_CuentaHabiente`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tipotransaccion` (
+  `Codigo_TipoTransaccion` INT NOT NULL AUTO_INCREMENT,
+  `Transaccion_Tipo` VARCHAR(100) NOT NULL,
+  `Efecto_TipoTransaccion` INT(11) NOT NULL,
+  PRIMARY KEY (`Codigo_TipoTransaccion`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_departamento`(
+`id_departamento` INT NOT NULL AUTO_INCREMENT,
+`nombre_departamento` VARCHAR(60) NOT NULL,
+`estado_departamento` VARCHAR(1) NOT NULL,
+PRIMARY KEY (`id_departamento`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_concepto`(
+`id_concepto` INT NOT NULL AUTO_INCREMENT,
+`nombre_concepto` VARCHAR(40) NOT NULL,
+`efecto_concepto` VARCHAR(10) NOT NULL,
+PRIMARY KEY (`id_concepto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_concepto_planilla`(
+`id_conceptoPlanilla` INT NOT NULL AUTO_INCREMENT,
+`nombre_concepto` VARCHAR(20),
+`tipo_concepto`  VARCHAR(10),
+`clase_concepto` VARCHAR(25),
+`Valor_concepto` FLOAT(10,2),
+PRIMARY KEY (`id_conceptoPlanilla`))
+ENGINE = InnoDB 
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_planilla_enc`(
+`id_planillaenc` INT NOT NULL AUTO_INCREMENT,
+`total_percepcion` FLOAT(10,2),
+`total_deduccion` FLOAT(10,2),
+`total_liquido`  FLOAT(10,2),
+PRIMARY KEY (`id_planillaenc`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
 -- -----------------------------------------------------
 -- FIN MANTENIMIENTOS
 -- -----------------------------------------------------
@@ -406,21 +509,35 @@ FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacio
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO `tbl_detalle_reservacion` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '3'), ('4', '2', '4');
 
-CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden`(
-`PK_id_orden` INT AUTO_INCREMENT,
-`PK_id_menu` INT NOT NULL,
-`PK_id_habitacion` INT NOT NULL,
-`cantidad_orden` INT NOT NULL,
-`no_mesa` VARCHAR(10) NOT NULL,
-`horario_orden` VARCHAR(10) NOT NULL,
-`fecha_orden` VARCHAR(10) NOT NULL,
-`PK_id_metodo_pago` INT NOT NULL,
-`total_orden` DECIMAL(10,2) NOT NULL,
-PRIMARY KEY (`PK_id_orden`),
-FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo),
-FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_servicioextra` (
+`Pk_correlativo_detalle` INT AUTO_INCREMENT NOT NULL,
+`id_reservacion` INT NOT NULL,
+`id_servicio` INT NOT NULL,
+PRIMARY KEY (`Pk_correlativo_detalle`),
+FOREIGN KEY (id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion),
+FOREIGN KEY (id_servicio) REFERENCES tbl_servicio(PK_id_servicio)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
-ALTER TABLE `empresarial`.`tbl_menu_orden` DROP COLUMN `PK_id_metodo_pago`;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden_encabezado`(
+`PK_id_orden_encabezado` INT AUTO_INCREMENT,
+`id_habitacion` INT NOT NULL,
+`mesa_orden` VARCHAR(10) NOT NULL,
+`fecha_orden` DATE NOT NULL,
+`horario_orden` TIME NOT NULL,
+PRIMARY KEY (`PK_id_orden_encabezado`),
+FOREIGN KEY (id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_menu_orden_detalle`(
+`PK_id_orden_detalle` INT AUTO_INCREMENT,
+`id_orden_encabezado` INT NOT NULL,
+`id_menu` INT NOT NULL,
+`cantidad_orden` INT NOT NULL,
+`estado_orden` TINYINT NOT NULL,
+PRIMARY KEY (`PK_id_orden_detalle`),
+FOREIGN KEY (id_orden_encabezado) REFERENCES tbl_menu_orden_encabezado(PK_id_orden_encabezado),
+FOREIGN KEY (id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cocina_restaurante` (
 `Pk_correlativo_cocina` INT AUTO_INCREMENT NOT NULL,
@@ -428,7 +545,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cocina_restaurante` (
 `id_orden` INT NOT NULL,
 `PK_id_menu` INT NOT NULL,
 PRIMARY KEY (`Pk_correlativo_cocina`),
-FOREIGN KEY (id_orden) REFERENCES tbl_menu_orden(PK_id_orden),
+FOREIGN KEY (id_orden) REFERENCES tbl_menu_orden_detalle(PK_id_orden_detalle),
 FOREIGN KEY (PK_id_menu) REFERENCES tbl_menu_restaurante(PK_codigo_correlativo)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
@@ -490,10 +607,11 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_check_in_out` (
   `PK_id_reservacion` INT NOT NULL,
   `validacion_entrada` DATE NOT NULL,
   `validacion_salida` DATE NOT NULL,
-  `PK_id_tarifa` INT NOT NULL,
+  `id_tarifa` INT NOT NULL,
+  `id_habitacion` INT NOT NULL,
+  `estado` INT NOT NULL,
    PRIMARY KEY (`PK_correlativo`),
-   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion),
-   FOREIGN KEY (PK_id_tarifa) REFERENCES tbl_tarifa(PK_id_tarifa)
+   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -894,6 +1012,201 @@ CREATE TABLE IF NOT EXISTS  `empresarial`.`tbl_balance_saldo_cliente` (
 PRIMARY KEY (
 `PK_codigo_salgo_cliente`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_planilla_det`(
+`id_planillaDe` INT NOT NULL AUTO_INCREMENT,
+`id_planillaenc` INT NOT NULL,
+`PK_id_empleado` INT NOT NULL,
+`id_conceptoPlanilla` INT NOT NULL,
+`valor_conceptoDet` FLOAT(10,2),
+PRIMARY KEY (`id_planillaDe`),
+FOREIGN KEY (`id_planillaenc`) REFERENCES `empresarial`.`tbl_planilla_enc`(`id_planillaenc`),
+FOREIGN KEY (`id_conceptoPlanilla`) REFERENCES `empresarial`.`tbl_Concepto_Planilla`(`id_conceptoPlanilla`),
+FOREIGN KEY (`PK_id_empleado`) REFERENCES `empresarial`.`tbl_empleado`(`PK_id_empleado`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_encabezadoasientocontable` (
+`Codigo_EncabezadoAsiento` INT NOT NULL AUTO_INCREMENT,
+`Fecha_AsientoContable` VARCHAR(100) NOT NULL,
+`Moneda_Asiento` INT NOT NULL,
+`Descripcion_Asiento` VARCHAR(100) NOT NULL,
+PRIMARY KEY (`Codigo_EncabezadoAsiento`),
+CONSTRAINT `fk_encabezadoasientocontable_moneda1`
+FOREIGN KEY (`Moneda_Asiento`) REFERENCES `empresarial`.`tbl_moneda` (`Codigo_Moneda`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cuentacontable` (
+  `Codigo_CuentaContable` INT NOT NULL AUTO_INCREMENT,
+  `Nombre_CuentaContable` VARCHAR(100) NULL DEFAULT NULL,
+  `Clasificacion_CuentaContable` INT NULL DEFAULT NULL,
+  `Estado_CuentaContable` VARCHAR(100) NULL DEFAULT NULL,
+  `Monto_CuentaContable` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`Codigo_CuentaContable`),
+  CONSTRAINT `fk_cuentacontable_clasificacioncuenta1`
+    FOREIGN KEY (`Clasificacion_CuentaContable`)
+    REFERENCES `empresarial`.`tbl_clasificacioncuenta` (`Codigo_clasificacion`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_partidacontable` (
+  `Codigo_PartidaContable` INT NOT NULL AUTO_INCREMENT,
+  `Fecha_PartidaContable` DATE NOT NULL,
+  `Periodo_FiscalPartida` INT NOT NULL,
+  `Glosa_PartidaContable` VARCHAR(100) NOT NULL,
+  `Monto_DeCuadre` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_PartidaContable`),
+  CONSTRAINT `fk_partidacontable_periodofiscal1`
+    FOREIGN KEY (`Periodo_FiscalPartida`)
+    REFERENCES `empresarial`.`tbl_periodofiscal` (`Codigo_PeriodoFiscal`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_asientocontabledetalle` (
+  `Codigo_DetalleAsiento` INT NOT NULL AUTO_INCREMENT,
+  `CuentaContable_Asiento` INT NOT NULL,
+  `Partida_Asiento` INT NOT NULL,
+  `Encabezado_Asiento` INT NOT NULL,
+  `Tipo_Asiento` INT NOT NULL,
+  `Monto_Debe` VARCHAR(100) NOT NULL,
+  `Monto_Haber` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_DetalleAsiento`),
+  CONSTRAINT `asientocontabledetalle_ibfk_1`
+    FOREIGN KEY (`Encabezado_Asiento`)
+    REFERENCES `empresarial`.`tbl_encabezadoasientocontable` (`Codigo_EncabezadoAsiento`),
+  CONSTRAINT `fk_asientocontabledetalle_tipo_asiento1`
+    FOREIGN KEY (`Tipo_Asiento`)
+    REFERENCES `empresarial`.`tbl_tipo_asiento` (`Codigo_TipoAsiento`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_asientocontabledetalle_cuentacontable1`
+    FOREIGN KEY (`CuentaContable_Asiento`)
+    REFERENCES `empresarial`.`tbl_cuentacontable` (`Codigo_CuentaContable`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_asientocontabledetalle_partidacontable1`
+    FOREIGN KEY (`Partida_Asiento`)
+    REFERENCES `empresarial`.`tbl_partidacontable` (`Codigo_PartidaContable`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cuentahabiente` (
+  `Codigo_CuentaHabiente` INT NOT NULL AUTO_INCREMENT,
+  `Nombre_CuentaHabiente` VARCHAR(100) NOT NULL,
+  `ApellidoP_CuentaHabiente` VARCHAR(100) NOT NULL,
+  `ApellidoM_CuentaHabiente` VARCHAR(100) NOT NULL,
+  `TipoPersona_CuentaHabiente` INT NOT NULL,
+  `Saldo_Habilitado` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`Codigo_CuentaHabiente`),
+  CONSTRAINT `fk_cuentahabiente_tipopersona1`
+    FOREIGN KEY (`TipoPersona_CuentaHabiente`)
+    REFERENCES `empresarial`.`tbl_tipopersona` (`Codigo_TipoPersona`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cuentabancaria` (
+  `Numero_CuentaBancaria` INT NOT NULL AUTO_INCREMENT,
+  `Moneda_Cuenta` INT NOT NULL,
+  `CuentaHabiente_Cuenta` INT NOT NULL,
+  `Banco_Cuenta` INT NOT NULL,
+  `Saldo_Cuenta` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Numero_CuentaBancaria`),
+    FOREIGN KEY (`CuentaHabiente_Cuenta`)
+    REFERENCES `empresarial`.`tbl_cuentahabiente` (`Codigo_CuentaHabiente`),
+    FOREIGN KEY (`Moneda_Cuenta`)
+    REFERENCES `empresarial`.`tbl_moneda` (`Codigo_Moneda`),
+    FOREIGN KEY (`Banco_Cuenta`)
+    REFERENCES `empresarial`.`tbl_banco` (`Codigo_Banco`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_cheque` (
+   `Numero_Cheque` INT NOT NULL AUTO_INCREMENT,
+  `Fecha_Cheque` DATE NOT NULL,
+  `FK_Banco` INT NOT NULL,
+  `FK_Cuentahabiente` INT NOT NULL,
+  `Monto_Cheque` FLOAT(10,2) NOT NULL,
+  PRIMARY KEY (`Numero_Cheque`),
+    FOREIGN KEY (`FK_Banco`)
+    REFERENCES `empresarial1`.`tbl_banco` (`Codigo_Banco`),
+    FOREIGN KEY (`FK_Cuentahabiente`)
+    REFERENCES `empresarial1`.`tbl_cuentahabiente` (`Codigo_CuentaHabiente`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transaccionbancaria` (
+  `Codigo_Transaccion` INT NOT NULL AUTO_INCREMENT,
+  `Fecha_Transaccion` DATE NOT NULL,
+  `Beneficiario` VARCHAR(100) NOT NULL,
+  `Cuenta_Bancaria` INT NOT NULL,
+  `Tipo_Transaccion` INT NOT NULL,
+  `Monto_Transaccion` VARCHAR(100) NOT NULL,
+  `Concepto_Transaccion` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`Codigo_Transaccion`),
+  FOREIGN KEY (`Tipo_Transaccion`)
+  REFERENCES `empresarial`.`tbl_tipotransaccion` (`Codigo_TipoTransaccion`),
+  FOREIGN KEY (`Cuenta_Bancaria`)
+  REFERENCES `empresarial`.`tbl_cuentabancaria` (`Numero_CuentaBancaria`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_MovimientoBancarioEncabezado` (
+	`id_movEnc` INT NOT NULL AUTO_INCREMENT,
+    `Documento` VARCHAR(50) NOT NULL,
+    `fecha` DATE NOT NULL,
+    `monto` FLOAT NOT NULL,
+    `Detalle` VARCHAR(100) NOT NULL,
+   PRIMARY KEY (`id_movEnc`),
+     CONSTRAINT `tbl_MovimientoBancarioEncabezadotbl_concepto1`
+    FOREIGN KEY (`Documento`) REFERENCES `bl_concepto` (`nombre_concepto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_MovimientoBancarioDETALLE` (
+	`id_movEnc` INT NOT NULL AUTO_INCREMENT,
+    `codigo_concepto` VARCHAR(10) NOT NULL,
+    `CREDITO` FLOAT NOT NULL,
+	`DEBITO` FLOAT NOT NULL, 
+   PRIMARY KEY (`id_movEnc`,`codigo_concepto`),
+    FOREIGN KEY (`id_movEnc`) REFERENCES `bl_MovimientoBancarioEncabezado` (`id_movEnc`),
+    FOREIGN KEY (`codigo_concepto`) REFERENCES `bl_concepto` (`nombre_concepto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_NotasDeCredito` (
+  `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
+  `NumeroDeCuenta` VARCHAR(100) NOT NULL,
+  `Beneficiario` VARCHAR(100) NOT NULL,
+  `Fecha` VARCHAR(100) NOT NULL,
+  `MontoPositivo` VARCHAR(100) NOT NULL,
+  `Descripcion` VARCHAR(100) NOT NULL,
+   PRIMARY KEY (`NumeroDeDocumento`),
+     CONSTRAINT `ftbl_NotasDeCreditotbl_cuentabancaria1`
+    FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_NotasDeDebito` (
+  `NumeroDeDocumento`  INT NOT NULL AUTO_INCREMENT,
+  `NumeroDeCuenta` VARCHAR(100) NOT NULL,
+  `Beneficiario` VARCHAR(100) NOT NULL,
+  `Fecha` VARCHAR(100) NOT NULL,
+  `MontoNegativo` VARCHAR(100) NOT NULL,
+  `Descripcion` VARCHAR(100) NOT NULL,
+   PRIMARY KEY (`NumeroDeDocumento`),
+     CONSTRAINT `tbl_NotasDeDebitotbl_cuentabancaria1`
+    FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
 -- FIN PROCESOS
