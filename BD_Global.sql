@@ -1207,7 +1207,43 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_NotasDeDebito` (
     FOREIGN KEY (`NumeroDeCuenta`) REFERENCES `bl_cuentabancaria` (`Numero_CuentaBancaria`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `ConciliacionBancaria`
+-- --------------------------------------------------------
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_ConciBancariaEncabezado` (
+`No_ConciliacionBan` INT NOT NULL AUTO_INCREMENT,
+`NumeroDeCuenta` INT NOT NULL,
+`FechaInicio` DATE NOT NULL,
+`FechaFinal` DATE NOT NULL,
+`Codigo_Banco` INT NOT NULL,
+`SaldoCuenta` VARCHAR(100) NOT NULL,
+`TotalDebito` FLOAT NOT NULL,
+`TotalCredito` FLOAT NOT NULL,
+`SaldoContable` FLOAT NOT NULL,
+PRIMARY KEY (`No_ConciliacionBan`),
+FOREIGN KEY (`NumeroDeCuenta`)REFERENCES `empresarial`.`tbl_cuentabancaria` (`Numero_CuentaBancaria`),
+FOREIGN KEY (`Codigo_Banco`) REFERENCES `empresarial`.`tbl_banco` (`Codigo_Banco`)
+
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_ConciBancariaDetalle` (
+`No_ConciliacionBdet` INT NOT NULL AUTO_INCREMENT,
+`Codigo_concepto` VARCHAR(100) NOT NULL,
+`Fecha` DATE NOT NULL,
+`Movimiento` INT NOT NULL,
+`CreditoC` VARCHAR(100) NOT NULL,
+`DebitoC` VARCHAR(100) NOT NULL,
+`SaldoConciliacion` FLOAT NOT NULL,
+PRIMARY KEY (`No_ConciliacionBdet`),
+FOREIGN KEY(`No_ConciliacionBdet`) REFERENCES `tbl_ConciBancariaEncabezado` (`No_ConciliacionBan`),
+FOREIGN KEY (`Movimiento`) REFERENCES `tbl_MovimientoBancarioEncabezado` (`id_movEnc`)
+
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
 -- FIN PROCESOS
 -- -----------------------------------------------------
