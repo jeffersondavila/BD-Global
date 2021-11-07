@@ -547,6 +547,14 @@ FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacio
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO `tbl_detalle_reservacion` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '3'), ('4', '2', '4');
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_registro_tarjetas` (
+`PK_id_reservacion` INT AUTO_INCREMENT NOT NULL,
+`no_tarjeta` INT NOT NULL,
+PRIMARY KEY (`PK_id_reservacion`),
+FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO `tbl_registro_tarjetas` VALUES ('1', '123456789'), ('2', '123456780');
+
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_servicioextra` (
 `Pk_correlativo_detalle` INT AUTO_INCREMENT NOT NULL,
 `id_reservacion` INT NOT NULL,
