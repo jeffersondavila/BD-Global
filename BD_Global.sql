@@ -547,6 +547,14 @@ FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacio
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 INSERT INTO `tbl_detalle_reservacion` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '3'), ('4', '2', '4');
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_registro_tarjetas` (
+`PK_id_reservacion` INT AUTO_INCREMENT NOT NULL,
+`no_tarjeta` INT NOT NULL,
+PRIMARY KEY (`PK_id_reservacion`),
+FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+INSERT INTO `tbl_registro_tarjetas` VALUES ('1', '123456789'), ('2', '123456780');
+
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_detalle_servicioextra` (
 `Pk_correlativo_detalle` INT AUTO_INCREMENT NOT NULL,
 `id_reservacion` INT NOT NULL,
@@ -642,18 +650,20 @@ VALUES
 ('5', '1', '1', '2021-04-20', 'Audifonos', '12345678', '2', '2021-04-21');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_check_in_out` (
-  `PK_correlativo` INT NOT NULL,
-  `PK_id_reservacion` INT NOT NULL,
-  `validacion_entrada` DATE NOT NULL,
-  `validacion_salida` DATE NOT NULL,
-  `id_tarifa` INT NOT NULL,
-  `id_habitacion` INT NOT NULL,
-  `estado` INT NOT NULL,
+  `PK_correlativo` INT AUTO_INCREMENT NOT NULL,
+  `id_reservacion_detalle` INT NOT NULL,
+  `validacion_entrada` DATE DEFAULT NULL,
+  `validacion_salida` DATE DEFAULT NULL,
+  `id_tarifa_detalle` INT NOT NULL,
+  `estado` TINYINT NOT NULL,
    PRIMARY KEY (`PK_correlativo`),
-   FOREIGN KEY (PK_id_reservacion) REFERENCES tbl_reservacion(PK_id_reservacion)
+   FOREIGN KEY (id_tarifa_detalle) REFERENCES tbl_tarifa(PK_id_tarifa),
+   FOREIGN KEY (id_reservacion_detalle) REFERENCES tbl_reservacion(PK_id_reservacion)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+INSERT INTO `tbl_check_in_out` VALUES ('1', '1', null , null , '1', '0'), ('2', '1', null , null , '2', '0'), ('3', '2', null , null , '3', '0'), ('4', '2', null , null , '4', '0' );
 
  CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_transporteruta` (
 `PK_codigo_transporteruta` INT  NOT NULL,
