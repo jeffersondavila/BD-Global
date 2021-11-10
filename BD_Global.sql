@@ -1394,6 +1394,26 @@ WHERE PK_id_gobernanta=idGobernanta;
 END$$
 DELIMITER ;
 
+-- ----------------------------------------------3
+DELIMITER $$
+USE `empresarial`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getValidarEntrega`(IN IdReservacion int,IN fechaactual date, out validacion int)
+BEGIN
+DECLARE fecha_inicio, fecha_fin DATE;
+SELECT
+tbl_reservacion.fecha_entrada_reservacion, tbl_reservacion.fecha_salida_reservacion
+INTO
+fecha_inicio, fecha_fin
+FROM 
+empresarial.tbl_reservacion 
+WHERE
+tbl_reservacion.PK_id_reservacion=IdReservacion;
+select PK_id_reservacion into validacion from tbl_reservacion 
+where PK_id_reservacion = IdReservacion and fechaactual between fecha_inicio and fecha_fin;
+END$$
+
+DELIMITER ;
+
 -- -------------------------
 -- FUNCIONES ALMACENADAS
 -- -------------------------
