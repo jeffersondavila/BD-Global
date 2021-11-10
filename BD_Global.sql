@@ -688,7 +688,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
 `PK_id_solicitud` INT NOT NULL,
 `PK_id_habitacion` INT NOT NULL,
 `PK_id_transporte` INT NOT NULL,
-`destino_viaje`INT NOT NULL,
+`destino_viaje`VARCHAR (100) NOT NULL,
 `precio_viaje` INT NOT NULL,
 PRIMARY KEY (`Pk_id_solicitud`),
 FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion),
