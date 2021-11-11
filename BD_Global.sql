@@ -688,7 +688,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
 `PK_id_solicitud` INT NOT NULL,
 `PK_id_habitacion` INT NOT NULL,
 `PK_id_transporte` INT NOT NULL,
-`destino_viaje`INT NOT NULL,
+`destino_viaje`VARCHAR (100) NOT NULL,
 `precio_viaje` INT NOT NULL,
 PRIMARY KEY (`Pk_id_solicitud`),
 FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion),
@@ -1392,6 +1392,26 @@ INTO validacion
 FROM empresarial.tbl_asignacion_gobernanta 
 WHERE PK_id_gobernanta=idGobernanta;
 END$$
+DELIMITER ;
+
+-- ----------------------------------------------3
+DELIMITER $$
+USE `empresarial`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getValidarEntrega`(IN IdReservacion int,IN fechaactual date, out validacion int)
+BEGIN
+DECLARE fecha_inicio, fecha_fin DATE;
+SELECT
+tbl_reservacion.fecha_entrada_reservacion, tbl_reservacion.fecha_salida_reservacion
+INTO
+fecha_inicio, fecha_fin
+FROM 
+empresarial.tbl_reservacion 
+WHERE
+tbl_reservacion.PK_id_reservacion=IdReservacion;
+select PK_id_reservacion into validacion from tbl_reservacion 
+where PK_id_reservacion = IdReservacion and fechaactual between fecha_inicio and fecha_fin;
+END$$
+
 DELIMITER ;
 
 -- -------------------------
