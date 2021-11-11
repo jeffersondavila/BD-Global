@@ -83,7 +83,15 @@ FOREIGN KEY (`PK_id_piso`) REFERENCES `tbl_piso`(`PK_id_piso`)
 INSERT INTO
 `empresarial`.`tbl_mantenimiento_habitacion`
 VALUES
-('1', '250', '1', '0', '1', '1', '5'),('2', '250', '4', '1', '2', '1', '6'),('3', '250', '1', '0', '1', '2', '7'),('4', '250', '4', '1', '2', '2', '8'),('5', '250', '1', '0', '1', '2', '9');
+('1', '250', '1', '0', '1', '1', '5'),
+('2', '250', '2', '1', '2', '1', '6'),
+('3', '250', '3', '0', '1', '2', '7'),
+('4', '250', '4', '1', '2', '2', '8'),
+('5', '250', '1', '0', '1', '2', '9'),
+('6', '250', '2', '0', '1', '1', '5'),
+('7', '250', '3', '1', '2', '1', '6'),
+('8', '250', '4', '0', '1', '2', '7'),
+('9', '250', '1', '1', '2', '2', '8');
 
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_huesped` (
 `PK_no_identificacion` INT NOT NULL,
@@ -604,7 +612,15 @@ PRIMARY KEY (`PK_id_asignacion_gobernanta`),
 FOREIGN KEY (`PK_id_gobernanta`) REFERENCES `tbl_empleado`(`PK_id_empleado`),
 FOREIGN KEY (`PK_id_ama_de_llave`) REFERENCES `tbl_empleado`(`PK_id_empleado`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
-INSERT INTO `tbl_asignacion_gobernanta` VALUES ('1', '5', '1', '1'), ('2', '2', '4', '1'), ('3', '3', '3', '1'), ('4', '5', '2', '1'), ('5', '5', '5', '1');
+INSERT INTO `tbl_asignacion_gobernanta` 
+VALUES ('1', '1', '2', '1'), 
+('2', '1', '4', '1'), 
+('3', '6', '3', '1'), 
+('4', '6', '7', '1'), 
+('5', '10', '8', '1'),
+('6', '1', '5', '1'), 
+('7', '1', '9', '1'),
+('8', '1', '8', '1');
 
 CREATE TABLE `empresarial`.`tbl_asignacion_limpieza` (
 `PK_id_asignacion_limpieza` INT NOT NULL AUTO_INCREMENT,
@@ -688,7 +704,7 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_solicitud_viaje`(
 `PK_id_solicitud` INT NOT NULL,
 `PK_id_habitacion` INT NOT NULL,
 `PK_id_transporte` INT NOT NULL,
-`destino_viaje`INT NOT NULL,
+`destino_viaje`VARCHAR (100) NOT NULL,
 `precio_viaje` INT NOT NULL,
 PRIMARY KEY (`Pk_id_solicitud`),
 FOREIGN KEY (PK_id_habitacion) REFERENCES tbl_mantenimiento_habitacion(PK_id_habitacion),
@@ -1392,6 +1408,26 @@ INTO validacion
 FROM empresarial.tbl_asignacion_gobernanta 
 WHERE PK_id_gobernanta=idGobernanta;
 END$$
+DELIMITER ;
+
+-- ----------------------------------------------3
+DELIMITER $$
+USE `empresarial`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getValidarEntrega`(IN IdReservacion int,IN fechaactual date, out validacion int)
+BEGIN
+DECLARE fecha_inicio, fecha_fin DATE;
+SELECT
+tbl_reservacion.fecha_entrada_reservacion, tbl_reservacion.fecha_salida_reservacion
+INTO
+fecha_inicio, fecha_fin
+FROM 
+empresarial.tbl_reservacion 
+WHERE
+tbl_reservacion.PK_id_reservacion=IdReservacion;
+select PK_id_reservacion into validacion from tbl_reservacion 
+where PK_id_reservacion = IdReservacion and fechaactual between fecha_inicio and fecha_fin;
+END$$
+
 DELIMITER ;
 
 -- -------------------------
