@@ -783,6 +783,20 @@ CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_tipo_documento` (
   PRIMARY KEY ( Pk_codigo_tipo_documento)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_forma_pago` (
+`PK_codigo_pago` INT NOT NULL,
+`codigo_proveedor` INT NOT NULL,
+`tipo_transaccion` VARCHAR(35) NULL DEFAULT NULL,
+`Forma_pago` VARCHAR(35) NULL DEFAULT NULL,
+`dias_pago` VARCHAR(35) NULL DEFAULT NULL,
+`fecha_pago` VARCHAR(35) NULL DEFAULT NULL,
+`estatus_pago` TINYINT NOT NULL,
+PRIMARY KEY (`PK_codigo_pago`),
+FOREIGN KEY (`codigo_proveedor`)
+REFERENCES `empresarial`.`tbl_proveedor` (`PK_codigo_proveedor`))
+ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4;
+
+
 CREATE TABLE IF NOT EXISTS `empresarial`.`tbl_compra_encabezado` (
 `PK_codigo_factura` INT NOT NULL,
 `PK_codigo_bodega` INT NOT NULL,
